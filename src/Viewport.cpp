@@ -30,8 +30,12 @@ void Viewport::draw() {
     
 }
 
-void Viewport::setLayer(int layer, ofImage * mask) {
-    if(layer < N_LAYER) layers[layer] = *mask;
+void Viewport::setLayer(int layer, ofPixels * mask) {
+    if(layer < N_LAYER) {
+        
+        layers[layer].setFromPixels(*mask);
+        layers[layer].update();
+    }//layers[layer] = *mask;
     else ofLog() << "Layers must be less than " << N_LAYER;
 }
 

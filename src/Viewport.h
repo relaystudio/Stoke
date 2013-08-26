@@ -1,4 +1,4 @@
-//
+ //
 //  Viewport.h
 //  snb2013_simple
 //
@@ -23,7 +23,7 @@ public:
     void draw();
     void update();
     
-    void setLayer(int layer, ofImage * mask);
+    void setLayer(int layer, ofPixels * mask);
     ofImage getLayer(int layer);
     
     void setCurrentLayer(float normalized);

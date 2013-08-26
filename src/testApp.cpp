@@ -19,6 +19,7 @@ void testApp::setup(){
     canvas.end();
     rectBuf=new ofRectangle(ofPoint(),ofPoint());
     edit=save=false;
+    editLayer=editCanvas=0;
     
 }
 
@@ -67,9 +68,11 @@ void testApp::saveEditted() {
 void testApp::updateEdit() {
     if(edit) {
         canvas. begin();
+        ofClear(0);
         pview[editCanvas]->getLayer(editLayer).draw(0,0);
         
-        ofSetColor(255, 0, 0);
+        if(save) ofSetColor(255);
+        else ofSetColor(255, 100, 100);
         for(size_t i=0;i<rect.size();i++) {
             ofRect(rect.at(i));
         }
@@ -77,9 +80,12 @@ void testApp::updateEdit() {
         canvas.end();
         
         if(save) {
-            
-            canvas.readToPixels(pview[editCanvas]->getLayer(editLayer).getPixelsRef());
-            pview[editCanvas]->getLayer(editLayer).update();
+            ofPixels pix;
+            canvas.readToPixels(pix);
+            pview[editCanvas]->setLayer(editLayer,&pix);
+            rect.clear();
+            ofLog() << "Saving projector " << editCanvas << " layer " << editLayer;
+            save=false;
             
         }
     }
@@ -105,7 +111,7 @@ void testApp::drawEdit() {
 void testApp::drawEditGrid() {
     int gap=20;
     ofPushMatrix();
-    ofSetColor(255);
+    ofSetColor(255,127);
     for(int i=0;i<pw;i+=gap) {
         ofLine(i,0,i,ph);
         if(i<ph) ofLine(0,i,pw,i);
@@ -121,14 +127,16 @@ void testApp::drawEditGrid() {
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-    
-    if(key < N_LAYER) {
-        editLayer = key;
+    if(key <= 49+N_LAYER) { // Top row num key 1 = 49
+        editLayer = key-49;
+        ofLog() << "Set Layer to " << editLayer;
     }
     
     switch(key) {
         case '`':
-            setEditMode(!getEditMode());
+            setEditMode(!getEditMode()); break;
+        case 'z':
+            saveEditted(); break;
         case 'q':
             editCanvas = 0; break;
         case 'w':
@@ -156,6 +164,7 @@ void testApp::mouseReleased(int x, int y, int button){
         int offset = editCanvas*pw;
         rectBuf->setPosition(rectBuf->getX()-offset, rectBuf->getY());
         rect.push_back(*rectBuf);
+        rectBuf->set(ofPoint(),ofPoint());
         ofLog() << "Finished rectangle" << rectBuf->getPosition() << "w" <<rectBuf->getWidth() << "h"<<rectBuf->getHeight();
     }
 }
