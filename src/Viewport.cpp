@@ -30,6 +30,17 @@ void Viewport::draw() {
     
 }
 
+void Viewport::saveToImage(int layer, string path) {
+    layers[layer].saveImage("saved/"+path+".png");
+}
+
+void Viewport::loadImages(int projector) {
+    for(int i=0;i<N_LAYER;i++) {
+        string path = "saved/" + ofToString(projector) + "-" + ofToString(i);
+        layers[i].loadImage(path+".png");
+    }
+}
+
 void Viewport::setLayer(int layer, ofPixels * mask) {
     if(layer < N_LAYER) {
         
@@ -37,6 +48,13 @@ void Viewport::setLayer(int layer, ofPixels * mask) {
         layers[layer].update();
     }//layers[layer] = *mask;
     else ofLog() << "Layers must be less than " << N_LAYER;
+}
+
+void Viewport::resetLayer(int layer) {
+    for(size_t i=0;i<layers[layer].getPixelsRef().size();i++) {
+        layers[layer].getPixelsRef()[i] = 0;
+    }
+
 }
 
 ofImage Viewport::getLayer(int layer) {

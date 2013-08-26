@@ -27,6 +27,9 @@ public:
     ofImage getLayer(int layer);
     
     void setCurrentLayer(float normalized);
+    void resetLayer(int layer);
+    void saveToImage(int layer, string path);
+    void loadImages(int projector);
     
 private:
     ofImage layers[N_LAYER];

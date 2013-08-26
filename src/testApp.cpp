@@ -48,6 +48,12 @@ void testApp::drawGraphics() {
     fbo.draw(0,0);
 }
 
+///////////////////////////////////////////////////
+////////////        Graphics Mode             /////////
+///////////////////////////////////////////////////
+
+
+
 
 ///////////////////////////////////////////////////
 ////////////        Edit Mode             /////////
@@ -63,6 +69,10 @@ bool testApp::getEditMode() {
 
 void testApp::saveEditted() {
     save = true;
+}
+
+void testApp::resetCurrent() {
+    pview[editCanvas]->resetLayer(editLayer);
 }
 
 void testApp::updateEdit() {
@@ -100,6 +110,7 @@ void testApp::drawEdit() {
         canvas.draw(0, 0);
         drawEditGrid();
         ofSetColor(255,0,0);
+
         ofDrawBitmapString("Number keys for layer, qwer for canvas", 10,10);
         ofDrawBitmapString("s to save to layer/canvas, r to reset", 10,20);
         ofPopMatrix();
@@ -120,6 +131,20 @@ void testApp::drawEditGrid() {
 }
 
 
+void testApp::exportSettings() {
+    for(int i=0;i<N_PROJECTOR;i++) {
+        for(int j=0;j<N_LAYER;j++) {
+            pview[i]->saveToImage(j, ofToString(i)+"-"+ofToString(j));
+        }
+    }
+}
+
+void testApp::reloadSettings() {
+    for(int i=0;i<N_PROJECTOR;i++) {
+        pview[i]->loadImages(i);
+    }
+}
+
 ///////////////////////////////////////////////////
 ////////////          Events              /////////
 ///////////////////////////////////////////////////
@@ -135,6 +160,8 @@ void testApp::keyPressed(int key){
     switch(key) {
         case '`':
             setEditMode(!getEditMode()); break;
+        case 'x':
+            resetCurrent(); break;
         case 'z':
             saveEditted(); break;
         case 'q':

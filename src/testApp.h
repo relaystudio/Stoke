@@ -13,7 +13,7 @@ class testApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-
+    
         // Graphics mode
         void drawGraphics();
         void updateGraphics();
@@ -25,6 +25,9 @@ class testApp : public ofBaseApp{
         void drawEdit();
         void drawEditGrid();
         void saveEditted();
+        void resetCurrent();
+        void exportSettings();
+        void reloadSettings();
     
         //Events
 		void keyPressed(int key);
