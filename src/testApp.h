@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "Viewport.h"
+#include "camera.h"
+#include "particles.h"
 
 #define N_PROJECTOR 4
 #define N_LAYER 5
@@ -45,6 +47,7 @@ class testApp : public ofBaseApp{
         ofFbo fbo; // Primary muxed output
         ofFbo canvas; // Project + Draw
         Viewport * pview[N_PROJECTOR];
+        Particles * part;
 	
         vector<ofRectangle> rect; // Holdes the editing rectangles
         ofRectangle * rectBuf; // Holds cur buffer

@@ -21,6 +21,8 @@ void testApp::setup(){
     edit=save=false;
     editLayer=editCanvas=0;
     
+    part = new Particles(ofRectangle(0,0,pw*N_PROJECTOR,ph));
+    
 }
 
 //--------------------------------------------------------------
@@ -39,8 +41,11 @@ void testApp::draw(){
 ///////////////////////////////////////////////////
 
 void testApp::updateGraphics() {
+    part->update();
+    
     fbo.begin();
     ofClear(0);
+    part->draw();
     fbo.end();
 }
 
