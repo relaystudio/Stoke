@@ -4,6 +4,7 @@
 void testApp::setup(){
     pw = 640;
     ph = 480;
+    ttf.loadFont("mono.ttf",20);
     fbo.allocate(pw * N_PROJECTOR, ph);
     canvas.allocate(pw,ph);
     for(size_t i=0;i<N_PROJECTOR;i++){
@@ -54,7 +55,7 @@ void testApp::drawGraphics() {
 }
 
 ///////////////////////////////////////////////////
-////////////        Graphics Mode             /////////
+////////////        Graphics Mode         /////////
 ///////////////////////////////////////////////////
 
 
@@ -116,8 +117,10 @@ void testApp::drawEdit() {
         drawEditGrid();
         ofSetColor(255,0,0);
 
-        ofDrawBitmapString("Number keys for layer, qwer for canvas", 10,10);
-        ofDrawBitmapString("s to save to layer/canvas, r to reset", 10,20);
+        ttf.drawString("Number keys for layer, qwer for canvas", 10,10);
+        ttf.drawString("s to save to layer/canvas, r to reset", 10,50);
+        ttf.drawString("Canvas: " + ofToString(editCanvas) +
+                        " Layer: " + ofToString(editLayer), 10,ofGetHeight()-10);
         ofPopMatrix();
         ofSetColor(255,0,0);
         if(!rectBuf->isEmpty()) ofRect(*rectBuf);

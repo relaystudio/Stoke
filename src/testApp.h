@@ -48,6 +48,8 @@ class testApp : public ofBaseApp{
         ofFbo canvas; // Project + Draw
         Viewport * pview[N_PROJECTOR];
         Particles * part;
+        ofTrueTypeFont ttf;
+    
 	
         vector<ofRectangle> rect; // Holdes the editing rectangles
         ofRectangle * rectBuf; // Holds cur buffer
