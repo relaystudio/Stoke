@@ -45,6 +45,7 @@ class testApp : public ofBaseApp{
         int pw, ph; // Projector width/height;
     
         ofFbo fbo; // Primary muxed output
+        ofShader shader;
         ofFbo canvas; // Project + Draw
         Viewport * pview[N_PROJECTOR];
         Particles * part;

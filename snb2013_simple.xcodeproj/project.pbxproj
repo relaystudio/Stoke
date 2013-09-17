@@ -78,6 +78,10 @@
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		BD73943017E27754007B8B80 /* ETF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BD73942E17E27754007B8B80 /* ETF.cpp */; };
 		BD73943117E27754007B8B80 /* fdog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BD73942F17E27754007B8B80 /* fdog.cpp */; };
+		BD73943B17E4364C007B8B80 /* noise.frag in Sources */ = {isa = PBXBuildFile; fileRef = BD73943617E4364C007B8B80 /* noise.frag */; };
+		BD73943C17E4364C007B8B80 /* noise.vert in Sources */ = {isa = PBXBuildFile; fileRef = BD73943717E4364C007B8B80 /* noise.vert */; };
+		BD73943D17E4364C007B8B80 /* noise.frag in Sources */ = {isa = PBXBuildFile; fileRef = BD73943917E4364C007B8B80 /* noise.frag */; };
+		BD73943E17E4364C007B8B80 /* noise.vert in Sources */ = {isa = PBXBuildFile; fileRef = BD73943A17E4364C007B8B80 /* noise.vert */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -375,6 +379,12 @@
 		BD73942C17E27754007B8B80 /* myvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myvec.h; sourceTree = "<group>"; };
 		BD73942E17E27754007B8B80 /* ETF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ETF.cpp; sourceTree = "<group>"; };
 		BD73942F17E27754007B8B80 /* fdog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fdog.cpp; sourceTree = "<group>"; };
+		BD73943417E4364C007B8B80 /* mono.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = mono.ttf; sourceTree = "<group>"; };
+		BD73943617E4364C007B8B80 /* noise.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = noise.frag; sourceTree = "<group>"; };
+		BD73943717E4364C007B8B80 /* noise.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = noise.vert; sourceTree = "<group>"; };
+		BD73943917E4364C007B8B80 /* noise.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = noise.frag; sourceTree = "<group>"; };
+		BD73943A17E4364C007B8B80 /* noise.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = noise.vert; sourceTree = "<group>"; };
+		BD73943F17E437F9007B8B80 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../openFrameworks/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -1063,6 +1073,35 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		BD73943217E4364C007B8B80 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				BD73943417E4364C007B8B80 /* mono.ttf */,
+				BD73943517E4364C007B8B80 /* shaders */,
+				BD73943817E4364C007B8B80 /* shaders_gl3 */,
+			);
+			name = data;
+			path = bin/data;
+			sourceTree = "<group>";
+		};
+		BD73943517E4364C007B8B80 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				BD73943617E4364C007B8B80 /* noise.frag */,
+				BD73943717E4364C007B8B80 /* noise.vert */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		BD73943817E4364C007B8B80 /* shaders_gl3 */ = {
+			isa = PBXGroup;
+			children = (
+				BD73943917E4364C007B8B80 /* noise.frag */,
+				BD73943A17E4364C007B8B80 /* noise.vert */,
+			);
+			path = shaders_gl3;
+			sourceTree = "<group>";
+		};
 		E4328144138ABC890047C5CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1085,6 +1124,8 @@
 			children = (
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
+				BD73943F17E437F9007B8B80 /* readme.md */,
+				BD73943217E4364C007B8B80 /* data */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
@@ -1514,6 +1555,10 @@
 				8384024A17CC18A4005479DE /* particles.cpp in Sources */,
 				BD73943017E27754007B8B80 /* ETF.cpp in Sources */,
 				BD73943117E27754007B8B80 /* fdog.cpp in Sources */,
+				BD73943B17E4364C007B8B80 /* noise.frag in Sources */,
+				BD73943C17E4364C007B8B80 /* noise.vert in Sources */,
+				BD73943D17E4364C007B8B80 /* noise.frag in Sources */,
+				BD73943E17E4364C007B8B80 /* noise.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

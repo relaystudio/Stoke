@@ -15,6 +15,14 @@ void testApp::setup(){
     ofClear(0);
     fbo.end();
     
+	if(ofGetGLProgrammableRenderer()){
+        ofLog() << "Loading gl3";
+		shader.load("shaders_gl3/noise.vert", "shaders_gl3/noise.frag");
+	}else{
+        ofLog() << "Loading gl2";
+		shader.load("shaders/noise.vert", "shaders/noise.frag");
+	}
+    
     canvas.begin();
     ofClear(0);
     canvas.end();
@@ -46,7 +54,10 @@ void testApp::updateGraphics() {
     
     fbo.begin();
     ofClear(0);
+    shader.begin();
+    
     part->draw();
+    shader.end();
     fbo.end();
 }
 

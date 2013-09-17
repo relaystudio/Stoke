@@ -42,6 +42,9 @@ void Particles::update() {
         ofPoint r = ofPoint(ofRandom(0,world.getWidth()), ofRandom(0,world.getHeight()));
         particles.at(i).addRepulsionForce(r, .09);
         particles.at(i).addAttractionPoint(r* .8, .1);
+        
+        particles.at(i).addAttractionPoint(ofGetMouseX(), ofGetMouseY(), .1);
+        
         if( cur->getPosition().x < world.getPosition().x) {
             cur->setPosition(world.getWidth(), cur->getPosition().y);
         } else
