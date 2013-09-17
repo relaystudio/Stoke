@@ -13,12 +13,32 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxUI.h"
+#include "ofxXmlSettings.h"
 
 class Camera {
 public:
     Camera();
     ~Camera();
+    
+    void update(); // Update logics
+    void draw(); // Calibration and debug
+    
+    // Make entry points
+    void setBounds(vector<ofPoint> * bounds);
+    void resetBounds();
+    void setBoundsFromPolyline(ofPolyline * line);
+    ofPolyline* getBounds();
+    
+    // Camera technical shizzle
+    void setupCamera();
+    void updateCamera();
+    
+    void updateFlow(const cv::Mat & frame);
+    
+    
 private:
+    ofVideoGrabber cam;
+    ofxCv::FlowFarneback fbflow;
 };
 
 #endif /* defined(__snb2013_simple__camera__) */
