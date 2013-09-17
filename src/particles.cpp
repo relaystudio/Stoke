@@ -10,28 +10,58 @@
 
 Particles::Particles(ofRectangle _bounds) {
     world = _bounds;
-    box2d.init();
-    box2d.setGravity(0.0,0.0);
-    box2d.setFPS(30);
+//    box2d.init();
+//    box2d.setGravity(0.0,0.0);
+//    box2d.setFPS(30);
+//    
+//    // Make the bounds a bit bigger so we can do wrapping
+//    box2d.setBounds(ofPoint(world.x-10,world.y),
+//                    ofPoint(world.getWidth()+10,world.getHeight()));
+//    
+//    for (int i=0; i<100; i++) {
+//		float r = ofRandom(5,19);
+//		ofxBox2dCircle particle;
+//		particle.setPhysics(3.0, 0.53, 0.9);
+//		particle.setup(box2d.getWorld(), world.getWidth()/2, world.getHeight()/2, r);
+//		particles.push_back(particle);
+//		
+//	}
     
-    // Make the bounds a bit bigger so we can do wrapping
-    box2d.setBounds(ofPoint(world.x-10,world.y),
-                    ofPoint(world.getWidth()+10,world.getHeight()));
     
-    for (int i=0; i<100; i++) {
-		float r = ofRandom(5,19);
-		ofxBox2dCircle particle;
-		particle.setPhysics(3.0, 0.53, 0.9);
-		particle.setup(box2d.getWorld(), world.getWidth()/2, world.getHeight()/2, r);
-		particles.push_back(particle);
-		
-	}
+	ofEnablePointSprites();
+	ofClear(0);
+    bgColor = mouseColor = ofColor(0);
+    fireParticles.setup(ofVec2f(world.getWidth(), world.getHeight()));
+    fireParticles.setIntensity(ofVec2f(.1,1.0)*3);
 }
 
 Particles::~Particles() {
     
 }
 
+void Particles::draw() {
+    ofClear(0);
+    ofSetColor(255);
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
+	fireParticles.draw();
+}
+
+void Particles::update() {
+    impulseIndex += 0.1;
+	
+	if(ofNoise(impulseIndex) > 0.68) {
+		fireParticles.addImpulse();
+	}
+	
+	// a bit of background flicker
+	float flickerAmount = ofNoise(impulseIndex) * 7. * intensity.y;
+	bgColor.r += flickerAmount;
+	bgColor.g += flickerAmount * 0.5;
+	
+	bgColor.lerp(mouseColor, 0.15);
+}
+
+/*
 void Particles::update() {
     box2d.update();
     for(size_t i=0;i<particles.size();i++) {
@@ -60,4 +90,4 @@ void Particles::draw() {
     for(size_t i=0;i<particles.size();i++) {
         particles.at(i).draw();
     }
-}
+}*/

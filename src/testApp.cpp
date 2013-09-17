@@ -55,13 +55,13 @@ void testApp::updateGraphics() {
     fbo.begin();
     ofClear(0);
     shader.begin();
-    
     part->draw();
     shader.end();
     fbo.end();
 }
 
 void testApp::drawGraphics() {
+    ofBackground(0);
     fbo.draw(0,0);
 }
 

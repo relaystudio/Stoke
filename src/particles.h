@@ -13,6 +13,7 @@
 
 #include "ofMain.h"
 #include "ofxBox2d.h"
+#include "FireParticles.h"
 
 class Particles {
 public:
@@ -22,9 +23,15 @@ public:
     void draw();
     void update();
 private:
-    ofxBox2d box2d;
+//    ofxBox2d box2d;
     ofRectangle world;
-    vector<ofxBox2dCircle> particles;
+//    vector<ofxBox2dCircle> particles;
+    FireParticles fireParticles;
+    float impulseIndex;
+	
+	ofColor bgColor;
+	ofColor mouseColor;
+	ofVec2f intensity;
 };
 
 #endif /* defined(__snb2013_simple__particles__) */
