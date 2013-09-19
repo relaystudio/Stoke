@@ -36,11 +36,12 @@ Particles::Particles(ofRectangle _bounds) {
 }
 
 Particles::~Particles() {
-    
+    fireParticles.shutdown();
 }
 
 void Particles::draw() {
     ofClear(0);
+    ofBackground(bgColor);
     ofSetColor(255);
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	fireParticles.draw();

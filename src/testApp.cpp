@@ -11,6 +11,8 @@ void testApp::setup(){
         pview[i] = new Viewport(ofPoint(i*N_PROJECTOR,0),pw,ph);
     }
     
+    cam = new Camera();
+    
     fbo.begin();
     ofClear(0);
     fbo.end();
@@ -27,7 +29,7 @@ void testApp::setup(){
     ofClear(0);
     canvas.end();
     rectBuf=new ofRectangle(ofPoint(),ofPoint());
-    edit=save=false;
+    edit=save=debug=false;
     editLayer=editCanvas=0;
     
     part = new Particles(ofRectangle(0,0,pw*N_PROJECTOR,ph));
@@ -44,6 +46,7 @@ void testApp::update(){
 void testApp::draw(){
     if(edit) drawEdit();
     else drawGraphics();
+    if(debug) drawDebug();
 }
 ///////////////////////////////////////////////////
 ////////////        Edit Mode             /////////
@@ -51,6 +54,7 @@ void testApp::draw(){
 
 void testApp::updateGraphics() {
     part->update();
+    cam->update();
     
     fbo.begin();
     ofClear(0);
@@ -70,7 +74,9 @@ void testApp::drawGraphics() {
 ///////////////////////////////////////////////////
 
 
-
+void testApp::drawDebug() {
+    cam->draw(ofPoint(0,0));
+}
 
 ///////////////////////////////////////////////////
 ////////////        Edit Mode             /////////
@@ -181,6 +187,8 @@ void testApp::keyPressed(int key){
             setEditMode(!getEditMode()); break;
         case 'x':
             resetCurrent(); break;
+        case 'd':
+            debug = !debug; break;
         case 'z':
             saveEditted(); break;
         case 'q':

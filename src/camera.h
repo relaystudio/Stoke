@@ -21,24 +21,26 @@ public:
     ~Camera();
     
     void update(); // Update logics
-    void draw(); // Calibration and debug
+    void draw(ofPoint pos); // Calibration and debug
     
     // Make entry points
     void setBounds(vector<ofPoint> * bounds);
     void resetBounds();
-    void setBoundsFromPolyline(ofPolyline * line);
+    void setBoundsFromPolyline(const ofPolyline * line);
     ofPolyline* getBounds();
     
     // Camera technical shizzle
     void setupCamera();
     void updateCamera();
     
+    void setupFlow();
     void updateFlow(const cv::Mat & frame);
     
     
 private:
     ofVideoGrabber cam;
-    ofxCv::FlowFarneback fbflow;
+    ofPolyline bounds;
+    ofxCv::FlowFarneback flow;
 };
 
 #endif /* defined(__snb2013_simple__camera__) */

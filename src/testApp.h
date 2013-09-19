@@ -20,6 +20,8 @@ class testApp : public ofBaseApp{
         void drawGraphics();
         void updateGraphics();
     
+        void drawDebug();
+    
         // Edit mode
         void setEditMode(bool active);
         bool getEditMode();
@@ -47,6 +49,9 @@ class testApp : public ofBaseApp{
         ofFbo fbo; // Primary muxed output
         ofShader shader;
         ofFbo canvas; // Project + Draw
+    
+        Camera * cam;
+    
         Viewport * pview[N_PROJECTOR];
         Particles * part;
         ofTrueTypeFont ttf;
@@ -55,7 +60,7 @@ class testApp : public ofBaseApp{
         vector<ofRectangle> rect; // Holdes the editing rectangles
         ofRectangle * rectBuf; // Holds cur buffer
     
-        bool edit, save;
+        bool edit, save, debug;
         int editLayer;
         int editCanvas;
 };
