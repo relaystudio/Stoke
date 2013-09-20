@@ -22,6 +22,7 @@ public:
     
     void draw();
     void update();
+    void randomWalk();
 private:
 //    ofxBox2d box2d;
     ofRectangle world;
@@ -32,6 +33,7 @@ private:
 	ofColor bgColor;
 	ofColor mouseColor;
 	ofVec2f intensity;
+    int curX,curY;
 };
 
 #endif /* defined(__snb2013_simple__particles__) */

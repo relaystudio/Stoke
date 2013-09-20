@@ -5,7 +5,7 @@ void testApp::setup(){
     pw = 640;
     ph = 480;
     ttf.loadFont("mono.ttf",20);
-    fbo.allocate(pw * N_PROJECTOR, ph);
+    fbo.allocate(pw * N_PROJECTOR, ph,GL_RGBA);
     canvas.allocate(pw,ph);
     for(size_t i=0;i<N_PROJECTOR;i++){
         pview[i] = new Viewport(ofPoint(i*N_PROJECTOR,0),pw,ph);
@@ -16,14 +16,6 @@ void testApp::setup(){
     fbo.begin();
     ofClear(0);
     fbo.end();
-    
-	if(ofGetGLProgrammableRenderer()){
-        ofLog() << "Loading gl3";
-		shader.load("shaders_gl3/noise.vert", "shaders_gl3/noise.frag");
-	}else{
-        ofLog() << "Loading gl2";
-		shader.load("shaders/noise.vert", "shaders/noise.frag");
-	}
     
     canvas.begin();
     ofClear(0);
@@ -44,6 +36,9 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    ofClear(0);
+    ofSetColor(255);
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
     if(edit) drawEdit();
     else drawGraphics();
     if(debug) drawDebug();
@@ -57,10 +52,17 @@ void testApp::updateGraphics() {
     cam->update();
     
     fbo.begin();
-    ofClear(0);
-    shader.begin();
+    glBlendFunc(GL_SRC_COLOR,GL_SRC_ALPHA);
     part->draw();
-    shader.end();
+    for(int i=0;i<N_PROJECTOR;i++) {
+        ofPushMatrix();
+        ofTranslate(i*pw, 0);
+        for(int j=N_LAYER;j>0;j--) {
+            pview[i]->getLayer(j).draw(0,0);
+        }
+        ofPopMatrix();
+    }
+    
     fbo.end();
 }
 
@@ -162,12 +164,14 @@ void testApp::exportSettings() {
             pview[i]->saveToImage(j, ofToString(i)+"-"+ofToString(j));
         }
     }
+    ofLog() << "Settings saved";
 }
 
 void testApp::reloadSettings() {
     for(int i=0;i<N_PROJECTOR;i++) {
         pview[i]->loadImages(i);
     }
+    ofLog() << "Settings loaded";
 }
 
 ///////////////////////////////////////////////////
@@ -199,6 +203,10 @@ void testApp::keyPressed(int key){
             editCanvas = 2; break;
         case 'r':
             editCanvas = 3; break;
+        case '[':
+            exportSettings(); break;
+        case ']':
+            reloadSettings(); break;
     }
 }
 

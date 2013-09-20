@@ -83,6 +83,8 @@
 		BD73943D17E4364C007B8B80 /* noise.frag in Sources */ = {isa = PBXBuildFile; fileRef = BD73943917E4364C007B8B80 /* noise.frag */; };
 		BD73943E17E4364C007B8B80 /* noise.vert in Sources */ = {isa = PBXBuildFile; fileRef = BD73943A17E4364C007B8B80 /* noise.vert */; };
 		BD73944C17E7EB31007B8B80 /* FireParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BD73944A17E7EB31007B8B80 /* FireParticles.cpp */; };
+		BDDED4FB17EBC45400DF196F /* shader.frag in Sources */ = {isa = PBXBuildFile; fileRef = BDDED4F917EBC45400DF196F /* shader.frag */; };
+		BDDED4FC17EBC45400DF196F /* shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = BDDED4FA17EBC45400DF196F /* shader.vert */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -388,6 +390,8 @@
 		BD73943F17E437F9007B8B80 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
 		BD73944A17E7EB31007B8B80 /* FireParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FireParticles.cpp; sourceTree = "<group>"; };
 		BD73944B17E7EB31007B8B80 /* FireParticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FireParticles.h; sourceTree = "<group>"; };
+		BDDED4F917EBC45400DF196F /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
+		BDDED4FA17EBC45400DF196F /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../openFrameworks/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -1090,6 +1094,8 @@
 		BD73943517E4364C007B8B80 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				BDDED4F917EBC45400DF196F /* shader.frag */,
+				BDDED4FA17EBC45400DF196F /* shader.vert */,
 				BD73943617E4364C007B8B80 /* noise.frag */,
 				BD73943717E4364C007B8B80 /* noise.vert */,
 			);
@@ -1565,6 +1571,8 @@
 				BD73943D17E4364C007B8B80 /* noise.frag in Sources */,
 				BD73943E17E4364C007B8B80 /* noise.vert in Sources */,
 				BD73944C17E7EB31007B8B80 /* FireParticles.cpp in Sources */,
+				BDDED4FB17EBC45400DF196F /* shader.frag in Sources */,
+				BDDED4FC17EBC45400DF196F /* shader.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
