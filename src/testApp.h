@@ -47,7 +47,9 @@ class testApp : public ofBaseApp{
         int pw, ph; // Projector width/height;
     
         ofFbo fbo; // Primary muxed output
+        ofFbo mask;
         ofShader shader;
+        ofShader alpha; // Alpha masks
         ofFbo canvas; // Project + Draw
     
         Camera * cam;

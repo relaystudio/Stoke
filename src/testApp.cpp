@@ -6,6 +6,8 @@ void testApp::setup(){
     ph = 480;
     ttf.loadFont("mono.ttf",20);
     fbo.allocate(pw * N_PROJECTOR, ph,GL_RGBA);
+    mask.allocate(pw * N_PROJECTOR,ph,GL_RGBA);
+    
     canvas.allocate(pw,ph);
     for(size_t i=0;i<N_PROJECTOR;i++){
         pview[i] = new Viewport(ofPoint(i*N_PROJECTOR,0),pw,ph);
@@ -25,7 +27,7 @@ void testApp::setup(){
     editLayer=editCanvas=0;
     
     part = new Particles(ofRectangle(0,0,pw*N_PROJECTOR,ph));
-    
+    alpha.load("shaders/alpha");
 }
 
 //--------------------------------------------------------------
@@ -51,19 +53,34 @@ void testApp::updateGraphics() {
     part->update();
     cam->update();
     
-    fbo.begin();
-    glBlendFunc(GL_SRC_COLOR,GL_SRC_ALPHA);
-    part->draw();
+    mask.begin();
+    ofBackground(0);
     for(int i=0;i<N_PROJECTOR;i++) {
         ofPushMatrix();
         ofTranslate(i*pw, 0);
         for(int j=N_LAYER;j>0;j--) {
+//            int trans = (ofGetMouseY() / ofGetHeight()) *255;
+            ofSetColor(255,255,255,255);
             pview[i]->getLayer(j).draw(0,0);
         }
         ofPopMatrix();
     }
+
+    mask.end();
+    
+    mask.getTextureReference().bind();
+    fbo.begin();
+    alpha.begin();
+    alpha.setUniformTexture("mask",mask,mask.getTextureReference().getTextureData().textureID);
+    
+    glEnable(GL_BLEND);
+    //glBlendFunc(GL_ONE, GL_ZERO);
+//    mask.draw(0,0);
+    part->draw();
+    alpha.end();
     
     fbo.end();
+    mask.getTextureReference().unbind();
 }
 
 void testApp::drawGraphics() {
@@ -104,9 +121,14 @@ void testApp::updateEdit() {
     if(edit) {
         canvas. begin();
         ofClear(0);
+        ofSetColor(255,80,80);
         pview[editCanvas]->getLayer(editLayer).draw(0,0);
         
-        if(save) ofSetColor(255);
+        if(save)  {
+         ofBackground(0);
+         ofSetColor(255,255,255,255);
+            
+        }
         else ofSetColor(255, 100, 100);
         for(size_t i=0;i<rect.size();i++) {
             ofRect(rect.at(i));
