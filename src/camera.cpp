@@ -107,10 +107,11 @@ void Camera::updateCamera() {
  ******************************/
 void Camera::setupFlow() {
     flow.setPyramidScale(.5);
-    flow.setNumLevels(3);
-    flow.setWindowSize(100);
+    flow.setNumLevels(4);
+    flow.setWindowSize(8);
     flow.setUseGaussian(false);
     flow.setPolyN(2);
+    flow.setPolySigma(1.5);
 }
 
 void Camera::updateFlow(const cv::Mat &frame) {
@@ -125,14 +126,17 @@ void Camera::updateFlow(const cv::Mat &frame) {
             int px, py, pw, ph;
             px = p->x-r < 1 ? 0 : p->x-r;
             py = p->y-r < 1 ? 0 : p->y-r;
-            pw = p->x+r >= cam.getWidth()  ? cam.getWidth()-1 : p->x+r;
-            ph = p->y+r >= cam.getHeight() ? cam.getHeight()-1 : p->y+r;
-            area.set(px, py, pw, ph);
-            ofLog() << "Area: " << area;
+            
+            // IN MEMORY OF MY DERP
+            // pw = p->x+r >= flow.getWidth()  ? flow.getWidth()-1 : p->x+r;
+            // ph = p->y+r >= flow.getHeight() ? flow.getHeight()-1 : p->y+r;
+            area.set(px, py, r*2, r*2);
+  //          ofLog() << "Area: " << area;
             ofVec2f force = flow.getAverageFlowInRegion(area);
-            ofLog() << "Force: " << force;
-            a->x += force.x;
-            a->y += force.y;
+//            ofLog() << "Force: " << force;
+            a->set(a->x + force.x, a->y + force.y);
+//            a->set(a->x + p->x / abs(a->x - p->x),
+//                   a->y + p->y / abs(a->y - p->y));
             
             
         }
