@@ -1,9 +1,11 @@
 #include "testApp.h"
 
+#pragma mark - BaseOF
 //--------------------------------------------------------------
 void testApp::setup(){
     pw = 640;
     ph = 480;
+    cvDebug = .8;
     ttf.loadFont("mono.ttf",20);
     fbo.allocate(pw * N_PROJECTOR, ph,GL_RGBA);
     mask.allocate(pw * N_PROJECTOR,ph,GL_RGBA);
@@ -47,44 +49,50 @@ void testApp::draw(){
     if(debug) drawDebug();
 }
 ///////////////////////////////////////////////////
-////////////        Edit Mode             /////////
+////////////        Graphics Mode             /////
 ///////////////////////////////////////////////////
+#pragma mark - Graphics
 
 void testApp::updateGraphics() {
     part->update();
     cam->update();
     
+    // Draw particle system
     cont.begin();
     part->draw();
     cont.end();
     
+    // Make mask
     mask.begin();
     ofBackground(0);
     for(int i=0;i<N_PROJECTOR;i++) {
         ofPushMatrix();
         ofTranslate(i*pw, 0);
         for(int j=N_LAYER;j>0;j--) {
-//            int trans = (ofGetMouseY() / ofGetHeight()) *255;
             ofSetColor(255,255,255,255);
             pview[i]->getLayer(j).draw(0,0);
         }
         ofPopMatrix();
     }
-
     mask.end();
-        cont.getTextureReference().bind();
+    
+    // Bind the textures
+    cont.getTextureReference().bind();
     mask.getTextureReference().bind();
+    
     fbo.begin();
     ofClear(0,100);
     alpha.begin();
+    
     alpha.setUniformTexture("tex0",cont,cont.getTextureReference().getTextureData().textureID);
     alpha.setUniformTexture("tex1",mask,mask.getTextureReference().getTextureData().textureID);
+    
     int fWidth = fbo.getWidth();
     int fHeight = fbo.getHeight();
     
     // Draw to a quad
     glBegin(GL_QUADS);
-    glTexCoord2f(0, 0);         glVertex3f(0, 0, 0);
+    glTexCoord2f(0, 0);             glVertex3f(0, 0, 0);
     glTexCoord2f(fWidth, 0);        glVertex3f(fWidth, 0, 0);
     glTexCoord2f(fWidth, fHeight);  glVertex3f(fWidth, fHeight, 0);
     glTexCoord2f(0, fHeight);       glVertex3f(0, fHeight, 0);
@@ -103,18 +111,18 @@ void testApp::drawGraphics() {
 }
 
 ///////////////////////////////////////////////////
-////////////        Graphics Mode         /////////
+////////////        Camera Mode         /////////
 ///////////////////////////////////////////////////
-
+#pragma mark - Camera
 
 void testApp::drawDebug() {
-    cam->draw(ofPoint(0,0));
+    cam->draw(ofPoint(0,0),cvDebug);
 }
 
 ///////////////////////////////////////////////////
 ////////////        Edit Mode             /////////
 ///////////////////////////////////////////////////
-
+#pragma mark - Edit mode
 void testApp::setEditMode(bool active) {
     edit = active;
 }
@@ -161,8 +169,6 @@ void testApp::updateEdit() {
         }
     }
 }
-
-
 
 void testApp::drawEdit() {
     if(edit) {
@@ -213,7 +219,7 @@ void testApp::reloadSettings() {
 ///////////////////////////////////////////////////
 ////////////          Events              /////////
 ///////////////////////////////////////////////////
-
+#pragma mark - Key events
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
@@ -243,6 +249,10 @@ void testApp::keyPressed(int key){
             exportSettings(); break;
         case ']':
             reloadSettings(); break;
+        case 'c':
+            cam->closePoints(); break;
+        case 'v':
+            cam->resetCircle(); break;
     }
 }
 
@@ -253,17 +263,26 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-
+    if(!edit && debug && cam->getBounds(cvDebug).inside(ofPoint(x,y))) {
+        ofPushStyle();
+        ofSetColor(200, 100, 255);
+        ofEllipse(x,y,20,20);
+        ofPopStyle();
+    }
 }
-
+#pragma mark - Mouse events for Edit
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
+    currentPoint = ofPoint(x,y);
     if(edit && !rectBuf->isEmpty()){
         int offset = editCanvas*pw;
         rectBuf->setPosition(rectBuf->getX()-offset, rectBuf->getY());
         rect.push_back(*rectBuf);
         rectBuf->set(ofPoint(),ofPoint());
         ofLog() << "Finished rectangle" << rectBuf->getPosition() << "w" <<rectBuf->getWidth() << "h"<<rectBuf->getHeight();
+    }
+    else if(!edit && debug && cam->getBounds(cvDebug).inside(currentPoint)) {
+        cam->addPoint(currentPoint);
     }
 }
 

@@ -24,34 +24,51 @@ void Camera::update() {
     updateCamera();
 }
 
-void Camera::draw(ofPoint pos) {
+void Camera::draw(ofPoint pos, float scale) {
     ofPushMatrix();
     ofTranslate(pos);
-    ofScale(.5,.5);
+    ofScale(scale,scale);
     cam.draw(0, 0);
     flow.draw(0, 0, cam.getWidth(), cam.getHeight());
+    ofPushStyle();
+    ofSetLineWidth(4);
+    ofSetColor(100, 100, 255);
     bounds.draw();
+    ofPopStyle();
     ofPopMatrix();
+}
+
+ofRectangle Camera::getBounds(float scale) {
+    return ofRectangle(0,0,cam.getWidth() * scale, cam.getHeight() * scale);
 }
 
 /******************************
 Boundary setup
 ******************************/
 
-void Camera::setBounds(vector<ofPoint> *bounds) {
+void Camera::addPoint(ofPoint point) {
+    bounds.addVertex(point);
     
 }
 
-void Camera::resetBounds() {
+void Camera::closePoints() {
+    bounds.close();
+}
+
+void Camera::setCircle(vector<ofPoint> *bounds) {
     
 }
 
-void Camera::setBoundsFromPolyline(const ofPolyline * line) {
+void Camera::resetCircle() {
+    
+}
+
+void Camera::setCircleFromPolyline(const ofPolyline * line) {
     bounds = *line;
     bounds.close(); // Bounds must be closed
 }
 
-ofPolyline * Camera::getBounds() {
+ofPolyline * Camera::getCircle() {
     return &bounds;	
 }
 /******************************

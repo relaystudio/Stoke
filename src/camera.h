@@ -21,13 +21,16 @@ public:
     ~Camera();
     
     void update(); // Update logics
-    void draw(ofPoint pos); // Calibration and debug
+    void draw(ofPoint pos, float scale); // Calibration and debug
     
     // Make entry points
-    void setBounds(vector<ofPoint> * bounds);
-    void resetBounds();
-    void setBoundsFromPolyline(const ofPolyline * line);
-    ofPolyline* getBounds();
+    void addPoint(ofPoint point);
+    void closePoints();
+    void setCircle(vector<ofPoint> * bounds);
+    void resetCircle();
+    void setCircleFromPolyline(const ofPolyline * line);
+    ofPolyline* getCircle();
+    ofRectangle getBounds(float scale);
     
     // Camera technical shizzle
     void setupCamera();

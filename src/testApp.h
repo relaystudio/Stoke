@@ -19,7 +19,6 @@ class testApp : public ofBaseApp{
         // Graphics mode
         void drawGraphics();
         void updateGraphics();
-    
         void drawDebug();
     
         // Edit mode
@@ -43,12 +42,13 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-    
+
         int pw, ph; // Projector width/height;
+        float cvDebug;
     
         ofFbo fbo; // Primary muxed output
-        ofFbo mask;
-        ofFbo cont;
+        ofFbo mask; // Masking layer
+        ofFbo cont; // Particles layer
         ofShader shader;
         ofShader alpha; // Alpha masks
         ofFbo canvas; // Project + Draw
@@ -61,6 +61,7 @@ class testApp : public ofBaseApp{
     
 	
         vector<ofRectangle> rect; // Holdes the editing rectangles
+        ofPoint currentPoint;
         ofRectangle * rectBuf; // Holds cur buffer
     
         bool edit, save, debug;
