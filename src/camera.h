@@ -41,6 +41,7 @@ public:
     void setScale(float _scale);
     
 private:
+    ofVec2f getAttraction(ofPoint &point, ofPoint &origin);
     float scale,radius;
     ofVideoGrabber cam;
     ofPolyline bounds;

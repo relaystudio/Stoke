@@ -131,14 +131,30 @@ void Camera::updateFlow(const cv::Mat &frame) {
             // pw = p->x+r >= flow.getWidth()  ? flow.getWidth()-1 : p->x+r;
             // ph = p->y+r >= flow.getHeight() ? flow.getHeight()-1 : p->y+r;
             area.set(px, py, r*2, r*2);
-  //          ofLog() << "Area: " << area;
             ofVec2f force = flow.getAverageFlowInRegion(area);
-//            ofLog() << "Force: " << force;
             a->set(a->x + force.x, a->y + force.y);
+            a->set(*a + getAttraction(*a,*p));
 //            a->set(a->x + p->x / abs(a->x - p->x),
 //                   a->y + p->y / abs(a->y - p->y));
             
             
         }
     }
+}
+
+ofVec2f Camera::getAttraction(ofPoint &point, ofPoint &origin) {
+    ofPoint p = point;
+    ofPoint o = origin;
+    ofPoint acc = ofPoint();
+    float dist = p.squareDistance(o);
+    float ratio = 1.0f ;
+    
+    acc.x += 0.1 * (o.x - p.x);
+    
+    acc.y += 0.1 * (o.y - p.y) ;
+    
+    ofPoint attr = acc * ratio ;
+
+//    ofLog() << attr;
+    return attr;
 }
