@@ -48,6 +48,7 @@ class testApp : public ofBaseApp{
     
         ofFbo fbo; // Primary muxed output
         ofFbo mask;
+        ofFbo cont;
         ofShader shader;
         ofShader alpha; // Alpha masks
         ofFbo canvas; // Project + Draw

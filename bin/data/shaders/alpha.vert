@@ -1,7 +1,9 @@
-attribute float pointSize;
+#version 120
 
-void main() {
-    gl_Position   = gl_ModelViewProjectionMatrix * gl_Vertex;
-	gl_PointSize  = pointSize;
-    gl_FrontColor = gl_Color;
+varying vec2 texCoord;
+
+void main()
+{
+    texCoord = vec2(gl_MultiTexCoord0);
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
 }

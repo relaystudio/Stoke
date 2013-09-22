@@ -7,6 +7,7 @@ void testApp::setup(){
     ttf.loadFont("mono.ttf",20);
     fbo.allocate(pw * N_PROJECTOR, ph,GL_RGBA);
     mask.allocate(pw * N_PROJECTOR,ph,GL_RGBA);
+    cont.allocate(pw*N_PROJECTOR,ph,GL_RGBA);
     
     canvas.allocate(pw,ph);
     for(size_t i=0;i<N_PROJECTOR;i++){
@@ -53,6 +54,10 @@ void testApp::updateGraphics() {
     part->update();
     cam->update();
     
+    cont.begin();
+    part->draw();
+    cont.end();
+    
     mask.begin();
     ofBackground(0);
     for(int i=0;i<N_PROJECTOR;i++) {
@@ -67,20 +72,29 @@ void testApp::updateGraphics() {
     }
 
     mask.end();
-    
+        cont.getTextureReference().bind();
     mask.getTextureReference().bind();
     fbo.begin();
+    ofClear(0,100);
     alpha.begin();
-    alpha.setUniformTexture("mask",mask,mask.getTextureReference().getTextureData().textureID);
+    alpha.setUniformTexture("tex0",cont,cont.getTextureReference().getTextureData().textureID);
+    alpha.setUniformTexture("tex1",mask,mask.getTextureReference().getTextureData().textureID);
+    int fWidth = fbo.getWidth();
+    int fHeight = fbo.getHeight();
     
-    glEnable(GL_BLEND);
-    //glBlendFunc(GL_ONE, GL_ZERO);
-//    mask.draw(0,0);
-    part->draw();
+    // Draw to a quad
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);         glVertex3f(0, 0, 0);
+    glTexCoord2f(fWidth, 0);        glVertex3f(fWidth, 0, 0);
+    glTexCoord2f(fWidth, fHeight);  glVertex3f(fWidth, fHeight, 0);
+    glTexCoord2f(0, fHeight);       glVertex3f(0, fHeight, 0);
+    glEnd();
+    
     alpha.end();
     
     fbo.end();
     mask.getTextureReference().unbind();
+    cont.getTextureReference().unbind();
 }
 
 void testApp::drawGraphics() {

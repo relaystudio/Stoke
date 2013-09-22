@@ -10,8 +10,8 @@
 
 Particles::Particles(ofRectangle _bounds) {
     world = _bounds;
-    curX = world.getWidth()/2;
-    curY = world.getHeight()/2;
+    curX = world.getWidth()/4;
+    curY = world.getHeight()/4;
 	ofEnablePointSprites();
     bgColor = mouseColor = ofColor(0);
     fireParticles.setup(ofVec2f(world.getWidth(), world.getHeight()));
@@ -46,7 +46,6 @@ void Particles::update() {
 	
 	bgColor.lerp(mouseColor, 0.15);
 }
-
 
 void Particles::randomWalk() {
     int x, y;
