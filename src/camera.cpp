@@ -14,6 +14,9 @@ using namespace ofxCv;
 Camera::Camera() {
     setupCamera();
     setupFlow();
+    
+    radius = cam.getWidth() / 64;
+    
 }
 
 Camera::~Camera() {
@@ -24,35 +27,43 @@ void Camera::update() {
     updateCamera();
 }
 
-void Camera::draw(ofPoint pos, float scale) {
+void Camera::draw(ofPoint pos) {
     ofPushMatrix();
     ofTranslate(pos);
     ofScale(scale,scale);
     cam.draw(0, 0);
     flow.draw(0, 0, cam.getWidth(), cam.getHeight());
     ofPushStyle();
-    ofSetLineWidth(4);
-    ofSetColor(100, 100, 255);
-    bounds.draw();
+        ofSetLineWidth(4);
+        ofSetColor(100, 100, 255);
+        bounds.draw();
+        ofSetColor(100, 255, 100);
+        active.draw();
     ofPopStyle();
     ofPopMatrix();
 }
 
-ofRectangle Camera::getBounds(float scale) {
+ofRectangle Camera::getBounds() {
     return ofRectangle(0,0,cam.getWidth() * scale, cam.getHeight() * scale);
 }
 
+void Camera::setScale(float _scale) {
+    scale = _scale;
+}
 /******************************
 Boundary setup
 ******************************/
 
 void Camera::addPoint(ofPoint point) {
-    bounds.addVertex(point);
+    ofPoint p = point / scale;
+    bounds.addVertex(p);
+    active = bounds;
     
 }
 
 void Camera::closePoints() {
     bounds.close();
+    active = bounds;
 }
 
 void Camera::setCircle(vector<ofPoint> *bounds) {
@@ -103,5 +114,27 @@ void Camera::setupFlow() {
 }
 
 void Camera::updateFlow(const cv::Mat &frame) {
+    flow.setWindowSize(16);
     flow.calcOpticalFlow(cam);
+    if(bounds.isClosed()) {
+        for(size_t i=0;i<bounds.size();i++) {
+            ofRectangle area;
+            ofPoint * p = &bounds[i];
+            ofPoint * a = &active[i];
+            float r = radius;
+            int px, py, pw, ph;
+            px = p->x-r < 1 ? 0 : p->x-r;
+            py = p->y-r < 1 ? 0 : p->y-r;
+            pw = p->x+r >= cam.getWidth()  ? cam.getWidth()-1 : p->x+r;
+            ph = p->y+r >= cam.getHeight() ? cam.getHeight()-1 : p->y+r;
+            area.set(px, py, pw, ph);
+            ofLog() << "Area: " << area;
+            ofVec2f force = flow.getAverageFlowInRegion(area);
+            ofLog() << "Force: " << force;
+            a->x += force.x;
+            a->y += force.y;
+            
+            
+        }
+    }
 }

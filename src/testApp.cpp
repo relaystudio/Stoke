@@ -5,7 +5,6 @@
 void testApp::setup(){
     pw = 640;
     ph = 480;
-    cvDebug = .8;
     ttf.loadFont("mono.ttf",20);
     fbo.allocate(pw * N_PROJECTOR, ph,GL_RGBA);
     mask.allocate(pw * N_PROJECTOR,ph,GL_RGBA);
@@ -17,6 +16,7 @@ void testApp::setup(){
     }
     
     cam = new Camera();
+    cam->setScale(.8);
     
     fbo.begin();
     ofClear(0);
@@ -116,7 +116,7 @@ void testApp::drawGraphics() {
 #pragma mark - Camera
 
 void testApp::drawDebug() {
-    cam->draw(ofPoint(0,0),cvDebug);
+    cam->draw(ofPoint(0,0));
 }
 
 ///////////////////////////////////////////////////
@@ -263,7 +263,7 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-    if(!edit && debug && cam->getBounds(cvDebug).inside(ofPoint(x,y))) {
+    if(!edit && debug && cam->getBounds().inside(ofPoint(x,y))) {
         ofPushStyle();
         ofSetColor(200, 100, 255);
         ofEllipse(x,y,20,20);
@@ -281,7 +281,7 @@ void testApp::mouseReleased(int x, int y, int button){
         rectBuf->set(ofPoint(),ofPoint());
         ofLog() << "Finished rectangle" << rectBuf->getPosition() << "w" <<rectBuf->getWidth() << "h"<<rectBuf->getHeight();
     }
-    else if(!edit && debug && cam->getBounds(cvDebug).inside(currentPoint)) {
+    else if(!edit && debug && cam->getBounds().inside(currentPoint)) {
         cam->addPoint(currentPoint);
     }
 }

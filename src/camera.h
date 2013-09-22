@@ -21,7 +21,7 @@ public:
     ~Camera();
     
     void update(); // Update logics
-    void draw(ofPoint pos, float scale); // Calibration and debug
+    void draw(ofPoint pos); // Calibration and debug
     
     // Make entry points
     void addPoint(ofPoint point);
@@ -30,7 +30,7 @@ public:
     void resetCircle();
     void setCircleFromPolyline(const ofPolyline * line);
     ofPolyline* getCircle();
-    ofRectangle getBounds(float scale);
+    ofRectangle getBounds();
     
     // Camera technical shizzle
     void setupCamera();
@@ -38,11 +38,13 @@ public:
     
     void setupFlow();
     void updateFlow(const cv::Mat & frame);
-    
+    void setScale(float _scale);
     
 private:
+    float scale,radius;
     ofVideoGrabber cam;
     ofPolyline bounds;
+    ofPolyline active;
     ofxCv::FlowFarneback flow;
 };
 
