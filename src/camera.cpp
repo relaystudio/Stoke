@@ -41,6 +41,14 @@ void Camera::draw(ofPoint pos) {
         active.draw();
     ofPopStyle();
     ofPopMatrix();
+    
+    ofPushMatrix();
+    vector<int> values = getValues(10);
+    for(size_t i=0;i<values.size();i++) {
+        ofRect(0,0,10,values[i]);
+        ofTranslate(5,0);
+    }
+    ofPopMatrix();
 }
 
 ofRectangle Camera::getBounds() {
@@ -158,3 +166,14 @@ ofVec2f Camera::getAttraction(ofPoint &point, ofPoint &origin) {
 //    ofLog() << attr;
     return attr;
 }
+
+vector<int> Camera::getValues(int _count) {
+    vector<int> val;
+    for(size_t i=0;i<_count;i++) {
+//        val.push_back(active.(i/_count).)
+        val.push_back(bounds.getPointAtPercent(i/_count).normalized().y*255);
+    }
+    return val;
+}
+
+

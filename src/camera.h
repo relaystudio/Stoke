@@ -30,6 +30,7 @@ public:
     void resetCircle();
     void setCircleFromPolyline(const ofPolyline * line);
     ofPolyline* getCircle();
+    vector<int> getValues(int _count);
     ofRectangle getBounds();
     
     // Camera technical shizzle
