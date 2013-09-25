@@ -43,10 +43,12 @@ void Camera::draw(ofPoint pos) {
     ofPopMatrix();
     
     ofPushMatrix();
-    vector<int> values = getValues(10);
+    ofTranslate(cam.getWidth()*scale, 0);
+    vector<float> values = getValues(10);
     for(size_t i=0;i<values.size();i++) {
-        ofRect(0,0,10,values[i]);
-        ofTranslate(5,0);
+        ofRect(0,0,values[i]*100,5);
+        ofLog() << i << ":" << values[i];
+        ofTranslate(0,5);
     }
     ofPopMatrix();
 }
@@ -158,22 +160,36 @@ ofVec2f Camera::getAttraction(ofPoint &point, ofPoint &origin) {
     float ratio = 1.0f ;
     
     acc.x += 0.1 * (o.x - p.x);
-    
     acc.y += 0.1 * (o.y - p.y) ;
     
     ofPoint attr = acc * ratio ;
 
-//    ofLog() << attr;
     return attr;
 }
 
-vector<int> Camera::getValues(int _count) {
-    vector<int> val;
-    for(size_t i=0;i<_count;i++) {
-//        val.push_back(active.(i/_count).)
-        val.push_back(bounds.getPointAtPercent(i/_count).normalized().y*255);
+vector<float> Camera::getValues(int _count) {
+    std::vector<float> v;
+    long distance;
+    for(size_t i=0;i<active.size();i++) {
+        distance = bounds.getCentroid2D().squareDistance(active[i]);
+        v.push_back(distance);
     }
-    return val;
+    
+    if(active.size()>0){
+        vector<float>::iterator min_v = std::min_element(v.begin(),v.end());
+        vector<float>::iterator max_v = std::max_element(v.begin(),v.end());
+        long mn = min_v[0];
+        long mx = max_v[0];
+        
+        if(v.size()>2) {
+            for(size_t i=0;i<v.size();i++) {
+                v[i] = (v.at(i) - mn) / (mx - mn);
+            }
+        }
+        
+    }
+    
+    return v;
 }
 
 

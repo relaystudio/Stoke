@@ -10,6 +10,8 @@
 #define __snb2013_simple__camera__
 
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxUI.h"
@@ -30,7 +32,7 @@ public:
     void resetCircle();
     void setCircleFromPolyline(const ofPolyline * line);
     ofPolyline* getCircle();
-    vector<int> getValues(int _count);
+    vector<float> getValues(int _count);
     ofRectangle getBounds();
     
     // Camera technical shizzle
@@ -43,6 +45,7 @@ public:
     
 private:
     ofVec2f getAttraction(ofPoint &point, ofPoint &origin);
+    vector<int> values;
     float scale,radius;
     ofVideoGrabber cam;
     ofPolyline bounds;
