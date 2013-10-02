@@ -20,6 +20,9 @@ Particles::Particles(ofRectangle _bounds) {
 
 Particles::~Particles() {
     fireParticles.shutdown();
+//    for(size_t i=0;i<particles->size();i++) {
+//        particles->at(i).shutdown();
+//    }
 }
 
 void Particles::draw() {
@@ -27,6 +30,9 @@ void Particles::draw() {
     ofBackground(bgColor);
     ofSetColor(255);
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
+//    for(size_t i=0;i<particles->size();i++) {
+//        particles->at(i).draw();
+//    }
 	fireParticles.draw();
     ofPopStyle();
 }
@@ -45,6 +51,14 @@ void Particles::update() {
 	bgColor.g += flickerAmount * 0.5;
 	
 	bgColor.lerp(mouseColor, 0.15);
+}
+
+void Particles::createGenerator(ofRectangle world) {
+    FireParticles * newPart;
+    newPart = new FireParticles();
+    fireParticles.setup(ofVec2f(world.getWidth(), world.getHeight()));
+    fireParticles.setIntensity(ofVec2f(.1,1.0)*3);
+   // particles->push_back(*newPart);
 }
 
 void Particles::randomWalk() {

@@ -23,11 +23,13 @@ public:
     void draw();
     void update();
     void randomWalk();
+    void createGenerator(ofRectangle world);
 private:
 //    ofxBox2d box2d;
     ofRectangle world;
 //    vector<ofxBox2dCircle> particles;
     FireParticles fireParticles;
+    //vector<FireParticles> * particles;
     float impulseIndex;
 	
 	ofColor bgColor;

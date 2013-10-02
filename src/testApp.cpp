@@ -48,6 +48,8 @@ void testApp::draw(){
     else drawGraphics();
     if(debug) drawDebug();
 }
+
+
 ///////////////////////////////////////////////////
 ////////////        Graphics Mode             /////
 ///////////////////////////////////////////////////
@@ -67,9 +69,10 @@ void testApp::updateGraphics() {
     ofBackground(0);
     for(int i=0;i<N_PROJECTOR;i++) {
         ofPushMatrix();
+        ofEnableAlphaBlending();
         ofTranslate(i*pw, 0);
         for(int j=N_LAYER;j>0;j--) {
-            ofSetColor(255,255,255,255);
+            ofSetColor(255,255,255,j/N_LAYER * 255);
             pview[i]->getLayer(j).draw(0,0);
         }
         ofPopMatrix();
@@ -162,6 +165,11 @@ void testApp::updateEdit() {
             ofPixels pix;
             canvas.readToPixels(pix);
             pview[editCanvas]->setLayer(editLayer,&pix);
+            
+//            for(size_t i=0;i<rect.size();i++) {
+//                part->createGenerator(rect.at(i));
+//            }
+            
             rect.clear();
             ofLog() << "Saving projector " << editCanvas << " layer " << editLayer;
             save=false;
@@ -234,7 +242,7 @@ void testApp::keyPressed(int key){
         case 'x':
             resetCurrent(); break;
         case 'd':
-            debug = !debug; break;
+            debug = !debug; cam->toggleGui(debug); break;
         case 'z':
             saveEditted(); break;
         case 'q':
