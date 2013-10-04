@@ -6,9 +6,9 @@ void testApp::setup(){
     pw = 640;
     ph = 480;
     ttf.loadFont("mono.ttf",20);
-    fbo.allocate(pw * N_PROJECTOR, ph,GL_RGBA);
-    mask.allocate(pw * N_PROJECTOR,ph,GL_RGBA);
-    cont.allocate(pw*N_PROJECTOR,ph,GL_RGBA);
+    fbo.allocate( pw * N_PROJECTOR, ph, GL_RGBA);
+    mask.allocate(pw * N_PROJECTOR, ph, GL_RGBA);
+    cont.allocate(pw * N_PROJECTOR, ph, GL_RGBA);
     
     canvas.allocate(pw,ph);
     for(size_t i=0;i<N_PROJECTOR;i++){
@@ -71,10 +71,10 @@ void testApp::updateGraphics() {
         ofPushMatrix();
         ofEnableAlphaBlending();
         ofTranslate(i*pw, 0);
-        for(int j=N_LAYER;j>0;j--) {
-            ofSetColor(255,255,255,j/N_LAYER * 255);
-            pview[i]->getLayer(j).draw(0,0);
-        }
+//        for(int j=N_LAYER;j>0;j--) {
+            //ofSetColor(255,255,255,j/N_LAYER * 255);
+            pview[i]->getLayer(0).draw(0,0);
+  //      }
         ofPopMatrix();
     }
     mask.end();
@@ -111,13 +111,13 @@ void testApp::updateGraphics() {
 void testApp::drawGraphics() {
     ofBackground(0);
     for(int i=0;i<N_PROJECTOR;i++) {
-         fbo.getTextureReference().drawSubsection(pw * i % 2,
-                                                  i>1 ? ph : 0,
-                                                  pw,
-                                                  ph,
-                                                  pw*i,
-                                                  0,
-                                                  pw, ph);
+      fbo.getTextureReference().
+        drawSubsection(   pw * (i % 2), // x
+                          i>1 ? ph : 0, // y
+                          pw, ph,       // w,h
+                          pw*i,         // sx
+                          0,            // sy
+                          pw, ph);      // sw,sh
         
     }
 }
