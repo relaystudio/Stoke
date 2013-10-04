@@ -6,7 +6,7 @@
 #include "particles.h"
 
 #define N_PROJECTOR 4
-#define N_LAYER 1
+#define N_LAYER 4
 #define N_ZONES 4
 
 

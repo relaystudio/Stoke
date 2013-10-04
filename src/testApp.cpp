@@ -43,10 +43,13 @@ void testApp::update(){
 void testApp::draw(){
     ofClear(0);
     ofSetColor(255);
+    ofPushMatrix();
+    if(fullscreen) ofScale(1.25, 1.25);
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     if(edit) drawEdit();
     else drawGraphics();
     if(debug) drawDebug();
+    ofPopMatrix();
 }
 
 
@@ -240,10 +243,10 @@ void testApp::reloadSettings() {
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-    if(key <= 49+N_LAYER) { // Top row num key 1 = 49
-        editLayer = key-49;
-        ofLog() << "Set Layer to " << editLayer;
-    }
+//    if(key <= 49+N_LAYER) { // Top row num key 1 = 49
+//        editLayer = key-49;
+//        ofLog() << "Set Layer to " << editLayer;
+//    }
     
     switch(key) {
         case '`':
