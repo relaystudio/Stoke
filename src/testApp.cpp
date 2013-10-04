@@ -26,7 +26,7 @@ void testApp::setup(){
     ofClear(0);
     canvas.end();
     rectBuf=new ofRectangle(ofPoint(),ofPoint());
-    edit=save=debug=false;
+    edit=save=debug=fullscreen=false;
     editLayer=editCanvas=0;
     
     part = new Particles(ofRectangle(0,0,pw*N_PROJECTOR,ph));
@@ -110,7 +110,16 @@ void testApp::updateGraphics() {
 
 void testApp::drawGraphics() {
     ofBackground(0);
-    fbo.draw(0,0);
+    for(int i=0;i<N_PROJECTOR;i++) {
+         fbo.getTextureReference().drawSubsection(pw * i % 2,
+                                                  i>1 ? ph : 0,
+                                                  pw,
+                                                  ph,
+                                                  pw*i,
+                                                  0,
+                                                  pw, ph);
+        
+    }
 }
 
 ///////////////////////////////////////////////////
@@ -181,7 +190,7 @@ void testApp::updateEdit() {
 void testApp::drawEdit() {
     if(edit) {
         ofPushMatrix();
-        ofTranslate(editCanvas*pw, 0);
+        ofTranslate((editCanvas%2)*pw, editCanvas>1?ph:0);
         canvas.draw(0, 0);
         drawEditGrid();
         ofSetColor(255,0,0);
@@ -246,21 +255,24 @@ void testApp::keyPressed(int key){
         case 'z':
             saveEditted(); break;
         case 'q':
-            editCanvas = 0; break;
+            if(debug) editPoly = 0; else editCanvas = 0; break;
         case 'w':
-            editCanvas = 1; break;
+            if(debug) editPoly = 1; else editCanvas = 1; break;
         case 'e':
-            editCanvas = 2; break;
+            if(debug) editPoly = 2; else editCanvas = 2; break;
         case 'r':
-            editCanvas = 3; break;
+            if(debug) editPoly = 3; else editCanvas = 3; break;
         case '[':
             exportSettings(); break;
         case ']':
             reloadSettings(); break;
         case 'c':
-            cam->closePoints(); break;
+            cam->closePoints(editPoly); break;
         case 'v':
             cam->resetCircle(); break;
+        case 'f':
+            fullscreen = !fullscreen;
+            ofSetFullscreen(fullscreen);
     }
 }
 
@@ -283,14 +295,17 @@ void testApp::mouseMoved(int x, int y ){
 void testApp::mouseReleased(int x, int y, int button){
     currentPoint = ofPoint(x,y);
     if(edit && !rectBuf->isEmpty()){
-        int offset = editCanvas*pw;
-        rectBuf->setPosition(rectBuf->getX()-offset, rectBuf->getY());
+        int offsetx = (editCanvas%2) * pw;
+        int offsety = editCanvas > 1 ? ph : 0;
+        rectBuf->setPosition(
+                             rectBuf->getX()-offsetx,
+                             rectBuf->getY()-offsety);
         rect.push_back(*rectBuf);
         rectBuf->set(ofPoint(),ofPoint());
         ofLog() << "Finished rectangle" << rectBuf->getPosition() << "w" <<rectBuf->getWidth() << "h"<<rectBuf->getHeight();
     }
     else if(!edit && debug && cam->getBounds().inside(currentPoint)) {
-        cam->addPoint(currentPoint);
+        cam->addPoint(editPoly, currentPoint);
     }
 }
 

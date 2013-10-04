@@ -10,6 +10,7 @@
 #define __snb2013_simple__camera__
 
 #define FIREWIRE 1
+#define N_POLY 4
 
 #include <iostream>
 #include <algorithm>
@@ -29,15 +30,20 @@ public:
     void draw(ofPoint pos); // Calibration and debug
     
     // Make entry points
-    void addPoint(ofPoint point);
-    void closePoints();
+    void addPoint(int currentPoly, ofPoint point);
+    void closePoints(int currentPoly);
     void setCircle(vector<ofPoint> * bounds);
-    void resetCircle();
-    void setCircleFromPolyline(const ofPolyline * line);
-    ofPolyline* getCircle();
-    vector<float> getValues(int _count);
-    ofRectangle getBounds();
     
+    ofPolyline* getCircle(int poly);
+    vector<float> getValues(int poly, int _count);
+    ofVec2f getAmplitudeWithinRegion(int poly);
+    
+    
+    
+    
+    
+    ofRectangle getBounds();
+    void resetCircle();
     // Camera technical shizzle
     void setupCamera();
     void updateCamera();
@@ -57,8 +63,8 @@ private:
 #else
     ofVideoGrabber cam;
 #endif
-    ofPolyline bounds;
-    ofPolyline active;
+    ofPolyline bounds[N_POLY];
+    ofPolyline active[N_POLY];
     ofxCv::FlowFarneback flow;
     
     /// OFX UI

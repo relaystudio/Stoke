@@ -24,6 +24,8 @@ public:
     void update();
     void randomWalk();
     void createGenerator(ofRectangle world);
+    void addEmitter(ofPoint _pnt);
+    void clearEmitters();
 private:
 //    ofxBox2d box2d;
     ofRectangle world;
@@ -32,6 +34,8 @@ private:
     //vector<FireParticles> * particles;
     float impulseIndex;
 	
+    vector<ofPoint> emitters;
+    
 	ofColor bgColor;
 	ofColor mouseColor;
 	ofVec2f intensity;

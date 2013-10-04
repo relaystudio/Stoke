@@ -61,6 +61,14 @@ void Particles::createGenerator(ofRectangle world) {
    // particles->push_back(*newPart);
 }
 
+void Particles::addEmitter(ofPoint _pnt) {
+    emitters.push_back(_pnt);
+}
+
+void Particles::clearEmitters() {
+    emitters.clear();
+}
+
 void Particles::randomWalk() {
     int x, y;
     x = curX + ofRandom(-10,10);

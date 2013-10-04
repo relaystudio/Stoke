@@ -6,7 +6,8 @@
 #include "particles.h"
 
 #define N_PROJECTOR 4
-#define N_LAYER 5
+#define N_LAYER 1
+#define N_ZONES 4
 
 
 class testApp : public ofBaseApp{
@@ -64,7 +65,7 @@ class testApp : public ofBaseApp{
         ofPoint currentPoint;
         ofRectangle * rectBuf; // Holds cur buffer
     
-        bool edit, save, debug;
+        bool edit, save, debug, fullscreen;
         int editLayer;
-        int editCanvas;
+        int editCanvas, editPoly;
 };

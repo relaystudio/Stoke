@@ -16,8 +16,8 @@ Camera::Camera() {
     setupFlow();
     setupGUI(); 
     
-    radius = cam.getWidth() / 64;
-    
+    radius = cam.getWidth() / 32;
+ 
 }
 
 Camera::~Camera() {
@@ -28,6 +28,7 @@ void Camera::update() {
     updateCamera();
 }
 
+#pragma Debug drawing
 void Camera::draw(ofPoint pos) {
     ofPushMatrix();
     ofTranslate(pos);
@@ -41,19 +42,26 @@ void Camera::draw(ofPoint pos) {
     ofPushStyle();
         ofSetLineWidth(4);
         ofSetColor(100, 100, 255);
-        bounds.draw();
+    for(int i=0;i<N_POLY;i++) {
+        bounds[i].draw();
         ofSetColor(100, 255, 100);
-        active.draw();
+        active[i].draw();
+        ofSetColor(255);
+        ofDrawBitmapString(ofToString(i), bounds[i].getCentroid2D());
+        ofDrawBitmapString(ofToString(getAmplitudeWithinRegion(i),2), bounds[i].getCentroid2D() + ofPoint(0,10));
+    }
     ofPopStyle();
     ofPopMatrix();
     
     ofPushMatrix();
     ofTranslate(cam.getWidth()*scale, 0);
-    vector<float> values = getValues(10);
-    for(size_t i=0;i<values.size();i++) {
-        ofRect(0,0,values[i]*100,5);
-        ofLog() << i << ":" << values[i];
-        ofTranslate(0,5);
+    for(int j=0;j<N_POLY;j++) {
+        vector<float> values = getValues(j,10);
+        for(size_t i=0;i<values.size();i++) {
+            ofRect(0,0,values[i + (j*10)]*100,5);
+            ofLog() << i << ":" << values[i];
+            ofTranslate(0,5);
+        }
     }
     ofPopMatrix();
     gui->draw();
@@ -70,20 +78,22 @@ ofRectangle Camera::getBounds() {
 void Camera::setScale(float _scale) {
     scale = _scale;
 }
+
+#pragma Boundary getters/setters
 /******************************
 Boundary setup
 ******************************/
 
-void Camera::addPoint(ofPoint point) {
+void Camera::addPoint(int currentPoly, ofPoint point) {
     ofPoint p = point / scale;
-    bounds.addVertex(p);
-    active = bounds;
+    bounds[currentPoly].addVertex(p);
+    active[currentPoly] = bounds[currentPoly];
     
 }
 
-void Camera::closePoints() {
-    bounds.close();
-    active = bounds;
+void Camera::closePoints(int currentPoly) {
+    bounds[currentPoly].close();
+    active[currentPoly] = bounds[currentPoly];
 }
 
 void Camera::setCircle(vector<ofPoint> *bounds) {
@@ -91,17 +101,12 @@ void Camera::setCircle(vector<ofPoint> *bounds) {
 }
 
 void Camera::resetCircle() {
-    
+    for(int i=0;i<N_POLY;i++) {
+        bounds[i].clear();
+        active[i].clear();
+    }
 }
-
-void Camera::setCircleFromPolyline(const ofPolyline * line) {
-    bounds = *line;
-    bounds.close(); // Bounds must be closed
-}
-
-ofPolyline * Camera::getCircle() {
-    return &bounds;	
-}
+#pragma Camera-Technical
 /******************************
  Camera technicals
  ******************************/
@@ -132,13 +137,13 @@ void Camera::updateCamera() {
 #endif
 }
 
-
+#pragma FLOW-Technical
 /******************************
  Flow technicals
  ******************************/
 void Camera::setupFlow() {
     flow.setPyramidScale(.5);
-    flow.setNumLevels(4);
+    flow.setNumLevels(2);
     flow.setWindowSize(8);
     flow.setUseGaussian(false);
     flow.setPolyN(2);
@@ -152,27 +157,35 @@ void Camera::updateFlow(ofPixels * _frame) {
 #else
     flow.calcOpticalFlow(cam);
 #endif
-    if(bounds.isClosed()) {
-        for(size_t i=0;i<bounds.size();i++) {
-            ofRectangle area;
-            ofPoint * p = &bounds[i];
-            ofPoint * a = &active[i];
-            float r = radius;
-            int px, py, pw, ph;
-            px = p->x-r < 1 ? 0 : p->x-r;
-            py = p->y-r < 1 ? 0 : p->y-r;
-            
-            // IN MEMORY OF MY DERP
-            // pw = p->x+r >= flow.getWidth()  ? flow.getWidth()-1 : p->x+r;
-            // ph = p->y+r >= flow.getHeight() ? flow.getHeight()-1 : p->y+r;
-            area.set(px, py, r*2, r*2);
-            ofVec2f force = flow.getAverageFlowInRegion(area);
-            a->set(a->x + force.x, a->y + force.y);
-            a->set(*a + getAttraction(*a,*p));
-//            a->set(a->x + p->x / abs(a->x - p->x),
-//                   a->y + p->y / abs(a->y - p->y));
-            
-            
+    
+    ofPolyline * currentBound;
+    ofPolyline * currentActive;
+    
+    for(int j=0;j<N_POLY;j++) {
+    
+        currentBound = &bounds[j];
+        currentActive = &active[j];
+        
+        if(currentBound->isClosed()) {
+            for(size_t i=0;i<currentBound->size();i++) {
+                ofRectangle area;
+                ofPoint * p = &currentBound->getVertices()[i];
+                ofPoint * a = &currentActive->getVertices()[i];
+                float r = radius;
+                int px, py, pw, ph;
+                px = p->x-r < 1 ? 0 : p->x-r;
+                py = p->y-r < 1 ? 0 : p->y-r;
+                
+                // IN MEMORY OF MY DERP
+                // pw = p->x+r >= flow.getWidth()  ? flow.getWidth()-1 : p->x+r;
+                // ph = p->y+r >= flow.getHeight() ? flow.getHeight()-1 : p->y+r;
+                area.set(px, py, r*2, r*2);
+                ofVec2f force = flow.getAverageFlowInRegion(area) * 4;
+                a->set(a->x + force.x, a->y + force.y);
+                a->set(*a + getAttraction(*a,*p));
+                
+                
+            }
         }
     }
 }
@@ -182,7 +195,7 @@ ofVec2f Camera::getAttraction(ofPoint &point, ofPoint &origin) {
     ofPoint o = origin;
     ofPoint acc = ofPoint();
     float dist = p.squareDistance(o);
-    float ratio = 1.0f ;
+    float ratio = .8f ;
     
     acc.x += 0.1 * (o.x - p.x);
     acc.y += 0.1 * (o.y - p.y) ;
@@ -192,11 +205,11 @@ ofVec2f Camera::getAttraction(ofPoint &point, ofPoint &origin) {
     return attr;
 }
 
-vector<float> Camera::getValues(int _count) {
+vector<float> Camera::getValues(int poly, int _count) {
     std::vector<float> v;
     long distance;
-    for(size_t i=0;i<active.size();i++) {
-        distance = bounds.getCentroid2D().squareDistance(active[i]);
+    for(size_t i=0;i<active[poly].size();i++) {
+        distance = bounds[poly].getCentroid2D().squareDistance(active[poly][i]);
         v.push_back(distance);
     }
     
@@ -214,9 +227,18 @@ vector<float> Camera::getValues(int _count) {
     return v;
 }
 
+ofVec2f Camera::getAmplitudeWithinRegion(int poly) {
+    return flow.getAverageFlowInRegion(bounds[poly].getBoundingBox());
+}
 
-///////////
-////////
+
+///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+////////////////// GUI ?????//?/??/?////////////////////
+//////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
 
 void Camera::setupGUI() {
     
@@ -379,14 +401,7 @@ void Camera::guiEvent(ofxUIEventArgs &e)
         cout << "fullscreen: " << toggle->getValue() << endl;
     } // OKAY< time for CV
     
-    /*
-     flow.setPyramidScale(.5);
-     flow.setNumLevels(4);
-     flow.setWindowSize(8);
-     flow.setUseGaussian(false);
-     flow.setPolyN(2);
-     flow.setPolySigma(1.5);
-     */
+
     
     else if (e.widget->getName() == "PYRAMIDSCALE") {
         ofxUISlider *slider = (ofxUISlider *) e.widget;
@@ -396,10 +411,10 @@ void Camera::guiEvent(ofxUIEventArgs &e)
         flow.setNumLevels(slider->getValue());
     } else if( e.widget->getName() == "WINDOWSIZE") {
         ofxUISlider *slider = (ofxUISlider *) e.widget;
-        flow.setWindowSize(slider->getValue());
+        flow.setWindowSize(int(slider->getValue()));
     } else if( e.widget->getName() == "POLYN") {
         ofxUISlider *slider = (ofxUISlider *) e.widget;
-        flow.setPolyN(slider->getValue());
+        flow.setPolyN(int(slider->getValue()));
     } else if( e.widget->getName() == "POLYSIGMA") {
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         flow.setPolySigma(slider->getValue());

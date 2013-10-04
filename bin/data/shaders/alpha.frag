@@ -6,8 +6,9 @@ uniform sampler2DRect tex0, tex1;
 
 void main(void) {
     
-    float mask = texture2DRect(tex1, gl_FragCoord.xy).r;
-    
+    float mask = texture2DRect(tex1, gl_FragCoord.xy).a;
+//    gl_FragColor = vec4(texture2DRect(tex0, gl_FragCoord.xy).rgba * (texture2DRect(tex1, gl_FragCoord.xy).r));
+
     if (mask > .9)
         gl_FragColor = texture2DRect(tex0, gl_FragCoord.xy).rgba;
     else
