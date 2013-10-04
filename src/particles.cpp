@@ -28,8 +28,17 @@ Particles::Particles(ofRectangle _bounds) {
     curX = world.getWidth()/4;
     curY = world.getHeight()/4;
     setupMidi();
-	ofBackground(0);
-	ofSetVerticalSync(true);
+    setupParticles();
+}
+
+Particles::~Particles() {
+    for(size_t i = 0; i < fireParticles.size(); ++i) {
+		fireParticles[i].shutdown();
+	}
+}
+
+void Particles::setupParticles() {
+    ofBackground(0);
 	ofEnablePointSprites();
 	ofClear(0);
     
@@ -37,7 +46,7 @@ Particles::Particles(ofRectangle _bounds) {
 	stokeParams.resize(fireParticles.size());
 	fbos.resize(fireParticles.size());
 	
-	ofSetWindowShape(1280, 800);
+	//ofSetWindowShape(1280, 800);
 	
 	for(size_t i = 0; i < fireParticles.size(); ++i) {
 #ifdef ONE_FBO
@@ -80,12 +89,6 @@ Particles::Particles(ofRectangle _bounds) {
 	spookyShader.end();
 }
 
-Particles::~Particles() {
-    for(size_t i = 0; i < fireParticles.size(); ++i) {
-		fireParticles[i].shutdown();
-	}
-}
-
 void Particles::setupParticleRects() {
     for(size_t i = 0; i < fireParticles.size(); ++i) {
 		ofRectangle rect(0, 0, fbos[i].getWidth(), fbos[i].getHeight());
@@ -94,8 +97,8 @@ void Particles::setupParticleRects() {
 }
 
 void Particles::draw() {
-
-    
+    ofEnableAlphaBlending();
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
     for(size_t i = 0; i < fireParticles.size(); ++i) {
 #ifdef ONE_FBO
 		if(i != 0) continue;
@@ -108,6 +111,7 @@ void Particles::draw() {
 			
 			ofSetColor(255);
 			ofEnableBlendMode(OF_BLENDMODE_ADD);
+            
 			if(showSpooky(i)) {
 				spookyShader.begin();
 				spookyShader.setUniform1f("visibility", ofMap(stokeParams[i].spookyVisibility, 1, 0, 0, 0.05, true));
@@ -131,38 +135,13 @@ void Particles::draw() {
 	ofSetColor(255);
 	ofDisableAlphaBlending();
 	
-#ifdef ONE_FBO
-	// one FBO, fullscreen
-	fbos[0].draw(0, 0, ofGetWidth(), ofGetHeight());
-#else
-    //    _  _     ___   __   __
-    //   | || |   | __|  \ \ / /
-    //   | __ |   | _|    \ V /
-    //   |_||_|   |___|   _|_|_
-    //  _|"""""|_|"""""|_| """ |
-    //  "`-0-0-'"`-0-0-'"`-0-0-'
-    //     ___    _  _     ___     ___     ___  __      __
-    //    /   \  | \| |   |   \   | _ \   | __| \ \    / /
-    //    | - |  | .` |   | |) |  |   /   | _|   \ \/\/ /
-    //    |_|_|  |_|\_|   |___/   |_|_\   |___|   \_/\_/
-    //  _|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|
-    //  "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
-    //
-    //	 Masking code goes here (i.e. maskingShader.bind(); fbos[0].draw(); etc)
-    //
-    //	 Choo Choo
-    //
-	// FBOs in 4-way-split
+
 	const ofVec2f fboDrawSize(640, 480);
-    for(int i=0;i<4;i++) {
-        fbos[i].draw(fboDrawSize.x * i, 0, fboDrawSize.x, fboDrawSize.y);
-    }
-//	fbos[1].draw(fboDrawSize.x, 0, fboDrawSize.x, fboDrawSize.y);
-//	fbos[2].draw(0, fboDrawSize.y, fboDrawSize.x, fboDrawSize.y);
-//	fbos[3].draw(fboDrawSize.x, fboDrawSize.y, fboDrawSize.x, fboDrawSize.y);
-#endif
-	
-    
+    fbos[0].draw(0, 0, fboDrawSize.x, fboDrawSize.y);
+	fbos[1].draw(fboDrawSize.x, 0, fboDrawSize.x, fboDrawSize.y);
+	fbos[2].draw(fboDrawSize.x*2, 0, fboDrawSize.x, fboDrawSize.y);
+	fbos[3].draw(fboDrawSize.x*3, 0, fboDrawSize.x, fboDrawSize.y);
+    ofEnableAlphaBlending();
     
     
 }
@@ -238,7 +217,7 @@ bool Particles::showSpooky(int which){return stokeParams[which].intensity < 0.2;
 
 
 void Particles::createGenerator(ofRectangle world) {
-    FireParticles * newPart;
+  //  FireParticles * newPart;
 //    newPart = new FireParticles();
 //    fireParticles.setup(ofVec2f(world.getWidth(), world.getHeight()));
 //    fireParticles.setIntensity(ofVec2f(.1,1.0)*3);
@@ -253,6 +232,10 @@ void Particles::clearEmitters() {
     emitters.clear();
 }
 
+void Particles::changeIntensity(ofPoint pnt) {
+    intensityVector = ofVec2f(ofMap(pnt.x, 0, 640, -1, 1, true),
+							  ofMap(pnt.y, 0, 480, 1, 0, true));
+}
 
 
 ///////////////////////////////////

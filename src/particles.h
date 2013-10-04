@@ -41,10 +41,10 @@ public:
     void createGenerator(ofRectangle world);
     void addEmitter(ofPoint _pnt);
     void clearEmitters();
-    
+    void setupParticles();
     void setupMidi();
     void updateMidi();
-    
+    void changeIntensity(ofPoint pnt);
     bool showSpooky(int which);
 	void setupParticleRects();
 	

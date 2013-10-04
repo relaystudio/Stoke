@@ -6,9 +6,9 @@ void testApp::setup(){
     pw = 640;
     ph = 480;
     ttf.loadFont("mono.ttf",20);
-    fbo.allocate( pw * N_PROJECTOR, ph, GL_RGBA);
-    mask.allocate(pw * N_PROJECTOR, ph, GL_RGBA);
-    cont.allocate(pw * N_PROJECTOR, ph, GL_RGBA);
+    fbo.allocate( pw * N_PROJECTOR, ph, GL_RGBA32F_ARB);
+    mask.allocate(pw * N_PROJECTOR, ph, GL_RGBA32F_ARB);
+    cont.allocate(pw * N_PROJECTOR, ph, GL_RGBA32F_ARB);
     
     canvas.allocate(pw,ph);
     for(size_t i=0;i<N_PROJECTOR;i++){
@@ -41,8 +41,8 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofClear(0);
-    ofSetColor(255);
+    if(edit) ofClear(0);
+   // ofSetColor(255);
     ofPushMatrix();
     if(fullscreen) ofScale(1.25, 1.25);
     ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -59,11 +59,12 @@ void testApp::draw(){
 #pragma mark - Graphics
 
 void testApp::updateGraphics() {
-    part->update();
     cam->update();
+    part->update();
     
     // Draw particle system
     cont.begin();
+//    ofBackground(0,100);
     part->draw();
     cont.end();
     
@@ -87,7 +88,7 @@ void testApp::updateGraphics() {
     mask.getTextureReference().bind();
     
     fbo.begin();
-    ofClear(0,100);
+    //ofClear(0,100);
     alpha.begin();
     
     alpha.setUniformTexture("tex0",cont,cont.getTextureReference().getTextureData().textureID);
@@ -265,8 +266,8 @@ void testApp::keyPressed(int key){
             if(debug) editPoly = 2; else editCanvas = 2; break;
         case 'r':
             if(debug) editPoly = 3; else editCanvas = 3; break;
-        case '[':
-            exportSettings(); break;
+//        case '[':
+            //exportSettings(); break;
         case ']':
             reloadSettings(); break;
         case 'c':
@@ -292,6 +293,7 @@ void testApp::mouseMoved(int x, int y ){
         ofEllipse(x,y,20,20);
         ofPopStyle();
     }
+    part->changeIntensity(ofPoint(x,y));
 }
 #pragma mark - Mouse events for Edit
 //--------------------------------------------------------------

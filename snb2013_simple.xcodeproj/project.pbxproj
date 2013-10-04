@@ -101,6 +101,10 @@
 		BDE5D72B17FF5FE70041CD56 /* ofxMidiMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D71017FF5FE70041CD56 /* ofxMidiMessage.cpp */; };
 		BDE5D72C17FF5FE70041CD56 /* ofxMidiOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D71217FF5FE70041CD56 /* ofxMidiOut.cpp */; };
 		BDE5D73717FF72140041CD56 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDE5D73617FF72140041CD56 /* CoreMIDI.framework */; };
+		BDE5D73C17FF79C40041CD56 /* fire-shader.frag in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73817FF79C40041CD56 /* fire-shader.frag */; };
+		BDE5D73D17FF79C40041CD56 /* fire-shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73917FF79C40041CD56 /* fire-shader.vert */; };
+		BDE5D73E17FF79C40041CD56 /* spooky-shader.frag in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73A17FF79C40041CD56 /* spooky-shader.frag */; };
+		BDE5D73F17FF79C40041CD56 /* spooky-shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73B17FF79C40041CD56 /* spooky-shader.vert */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -461,6 +465,10 @@
 		BDE5D71317FF5FE70041CD56 /* ofxMidiOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMidiOut.h; sourceTree = "<group>"; };
 		BDE5D71417FF5FE70041CD56 /* ofxMidiTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMidiTypes.h; sourceTree = "<group>"; };
 		BDE5D73617FF72140041CD56 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		BDE5D73817FF79C40041CD56 /* fire-shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "fire-shader.frag"; sourceTree = "<group>"; };
+		BDE5D73917FF79C40041CD56 /* fire-shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "fire-shader.vert"; sourceTree = "<group>"; };
+		BDE5D73A17FF79C40041CD56 /* spooky-shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "spooky-shader.frag"; sourceTree = "<group>"; };
+		BDE5D73B17FF79C40041CD56 /* spooky-shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "spooky-shader.vert"; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../openFrameworks/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -1272,6 +1280,10 @@
 				BDDED4FA17EBC45400DF196F /* shader.vert */,
 				BD73943617E4364C007B8B80 /* noise.frag */,
 				BD73943717E4364C007B8B80 /* noise.vert */,
+				BDE5D73817FF79C40041CD56 /* fire-shader.frag */,
+				BDE5D73917FF79C40041CD56 /* fire-shader.vert */,
+				BDE5D73A17FF79C40041CD56 /* spooky-shader.frag */,
+				BDE5D73B17FF79C40041CD56 /* spooky-shader.vert */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
@@ -1841,6 +1853,10 @@
 				BDE5D72A17FF5FE70041CD56 /* ofxMidiIn.cpp in Sources */,
 				BDE5D72B17FF5FE70041CD56 /* ofxMidiMessage.cpp in Sources */,
 				BDE5D72C17FF5FE70041CD56 /* ofxMidiOut.cpp in Sources */,
+				BDE5D73C17FF79C40041CD56 /* fire-shader.frag in Sources */,
+				BDE5D73D17FF79C40041CD56 /* fire-shader.vert in Sources */,
+				BDE5D73E17FF79C40041CD56 /* spooky-shader.frag in Sources */,
+				BDE5D73F17FF79C40041CD56 /* spooky-shader.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
