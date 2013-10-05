@@ -152,7 +152,7 @@ void Particles::update() {
 	
 	size_t targetColumn = ofMap(intensityVector.x, -1, 1, 0, fireParticles.size());
 	for(size_t i = 0; i < stokeParams.size(); ++i) {
-		float columnTarget = camVec[i].y*18;
+		float columnTarget = camVec[i].y;
 		
 		if(stokeParams[i].intensity < columnTarget) {
 			stokeParams[i].intensity = ofLerp(stokeParams[i].intensity, columnTarget, 0.5);
@@ -252,7 +252,6 @@ void Particles::setupMidi() {
 }
 
 void Particles::updateMidi() {
-    
 	midiOut.sendControlChange(1, kFireIntensity, totalIntensity * 127);
 	midiOut.sendControlChange(1, kFireA, stokeParams[0].intensity * 127);
 	midiOut.sendControlChange(1, kFireB, stokeParams[1].intensity * 127);
