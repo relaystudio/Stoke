@@ -24,7 +24,7 @@ public:
     void update();
     
     void setLayer(int layer, ofPixels * mask);
-    ofImage getLayer(int layer);
+    ofImage * getLayer(int layer);
     
     void setCurrentLayer(float normalized);
     void resetLayer(int layer);

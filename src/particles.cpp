@@ -29,6 +29,7 @@ Particles::Particles(ofRectangle _bounds) {
     curY = world.getHeight()/4;
     setupMidi();
     setupParticles();
+    camVec.clear();
 }
 
 Particles::~Particles() {
@@ -98,7 +99,7 @@ void Particles::setupParticleRects() {
 
 void Particles::draw() {
     ofEnableAlphaBlending();
-    ofEnableBlendMode(OF_BLENDMODE_ADD);
+ //   ofEnableBlendMode(OF_BLENDMODE_ADD);
     for(size_t i = 0; i < fireParticles.size(); ++i) {
 #ifdef ONE_FBO
 		if(i != 0) continue;
@@ -151,7 +152,7 @@ void Particles::update() {
 	
 	size_t targetColumn = ofMap(intensityVector.x, -1, 1, 0, fireParticles.size());
 	for(size_t i = 0; i < stokeParams.size(); ++i) {
-		float columnTarget = i == targetColumn ? intensityVector.y : 0;
+		float columnTarget = camVec[i].y*18;
 		
 		if(stokeParams[i].intensity < columnTarget) {
 			stokeParams[i].intensity = ofLerp(stokeParams[i].intensity, columnTarget, 0.5);
@@ -203,12 +204,12 @@ void Particles::update() {
 	bgColor.g += flickerAmount * 0.5;
 	bgColor.lerp(targetColor, 0.15);
 	
-#ifdef CONSTANT_INTENSITY
+//#ifdef CONSTANT_INTENSITY
 	for(size_t i = 0; i < stokeParams.size(); ++i) {
-		stokeParams[i].intensity = CONSTANT_INTENSITY;
-		stokeParams[i].spookyVisibility = CONSTANT_INTENSITY;
+		stokeParams[i].intensity = 0.9;
+		stokeParams[i].spookyVisibility = 0.9;
 	}
-#endif
+//#endif
     
     updateMidi();
 }
@@ -237,6 +238,10 @@ void Particles::changeIntensity(ofPoint pnt) {
 							  ofMap(pnt.y, 0, 480, 1, 0, true));
 }
 
+
+void Particles::setVectors(vector<ofVec2f> vec) {
+    camVec = vec;
+}
 
 ///////////////////////////////////
 ////////// MIDI STUFFS  ///////////

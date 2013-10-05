@@ -36,12 +36,12 @@ public:
     
     ofPolyline* getCircle(int poly);
     vector<float> getValues(int poly, int _count);
-    ofVec2f getAmplitudeWithinRegion(int poly);
+    vector<ofVec2f> getAmplitudeWithinRegion();
     
     
     
     
-    
+    float div = .5;
     ofRectangle getBounds();
     void resetCircle();
     // Camera technical shizzle

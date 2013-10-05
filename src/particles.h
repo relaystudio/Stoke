@@ -16,10 +16,9 @@
 #include "ofxMidi.h"
 #include "FireParticles.h"
 
-
-const ofColor spookyBlue(0, 10, 50);
+const ofColor spookyBlue(0, 10, 50); // 0 10 50
 //const ofColor fireRed(50, 30, 0);
-const ofColor fireRed(155, 105, 40);
+const ofColor fireRed(155, 105, 40); //155 105 40
 
 struct StokeParams {
 	float intensity;
@@ -47,11 +46,11 @@ public:
     void changeIntensity(ofPoint pnt);
     bool showSpooky(int which);
 	void setupParticleRects();
+    void setVectors(vector<ofVec2f> vec);
 	
     
 private:
-//    ofxBox2d box2d;
-    ofRectangle world;
+    ofxBox2d box2d;    ofRectangle world;
 //    vector<ofxBox2dCircle> particles;
 //    FireParticles fireParticles;
     //vector<FireParticles> * particles;
@@ -79,6 +78,8 @@ private:
 	ofShader spookyShader;
 	ofTexture spookyTex;
 	vector<ofVec2f> spookyVerts;
+    
+    vector<ofVec2f> camVec;
     
     
 };

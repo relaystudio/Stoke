@@ -57,9 +57,9 @@ void Viewport::resetLayer(int layer) {
 
 }
 
-ofImage Viewport::getLayer(int layer) {
-    if(layer < N_LAYER) return layers[layer];
-    else return layers[0];
+ofImage * Viewport::getLayer(int layer) {
+    if(layer < N_LAYER) return &layers[layer];
+    else return &layers[0];
 }
 
 void Viewport::setCurrentLayer(float normalized) {

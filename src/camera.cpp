@@ -17,7 +17,11 @@ Camera::Camera() {
     setupGUI(); 
     
     radius = cam.getWidth() / 32;
- 
+    
+    for(int i=0;i<N_POLY;i++) {
+        bounds[i] = ofPolyline();
+        active[i] = bounds[i];
+    }
 }
 
 Camera::~Camera() {
@@ -43,26 +47,29 @@ void Camera::draw(ofPoint pos) {
         ofSetLineWidth(4);
         ofSetColor(100, 100, 255);
     for(int i=0;i<N_POLY;i++) {
+        ofPushMatrix();
+        ofScale(2,2);
         bounds[i].draw();
         ofSetColor(100, 255, 100);
         active[i].draw();
+        ofPopMatrix();
         ofSetColor(255);
         ofDrawBitmapString(ofToString(i), bounds[i].getCentroid2D());
-        ofDrawBitmapString(ofToString(getAmplitudeWithinRegion(i),2), bounds[i].getCentroid2D() + ofPoint(0,10));
+        ofDrawBitmapString(ofToString(getAmplitudeWithinRegion()[i],2), bounds[i].getCentroid2D() + ofPoint(0,10));
     }
     ofPopStyle();
     ofPopMatrix();
     
     ofPushMatrix();
     ofTranslate(cam.getWidth()*scale, 0);
-    for(int j=0;j<N_POLY;j++) {
-        vector<float> values = getValues(j,10);
-        for(size_t i=0;i<values.size();i++) {
-            ofRect(0,0,values[i + (j*10)]*100,5);
-            ofLog() << i << ":" << values[i];
-            ofTranslate(0,5);
-        }
-    }
+//    for(int j=0;j<N_POLY;j++) {
+//        vector<float> values = getValues(j,10);
+//        for(size_t i=0;i<values.size();i++) {
+//            ofRect(0,0,values[i + (j*10)]*100,5);
+//            ofLog() << i << ":" << values[i];
+//            ofTranslate(0,5);
+//        }
+//    }
     ofPopMatrix();
     gui->draw();
 }
@@ -85,7 +92,7 @@ Boundary setup
 ******************************/
 
 void Camera::addPoint(int currentPoly, ofPoint point) {
-    ofPoint p = point / scale;
+    ofPoint p = (point / scale) * div;
     bounds[currentPoly].addVertex(p);
     active[currentPoly] = bounds[currentPoly];
     
@@ -113,7 +120,10 @@ void Camera::resetCircle() {
 
 void Camera::setupCamera() {
 #ifdef FIREWIRE
-      cam.setup();
+    cam.setup();
+    cam.flushBuffer();
+//    cam.setSize(320,240);
+    cam.setFrameRate(7.5);
     cout << "camera: " << cam.getLibdcCamera() << endl;
     cout << "camera: " << cam.getImageType() << endl;
     frame.allocate(cam.getWidth(),cam.getHeight(),cam.getImageType());
@@ -151,8 +161,9 @@ void Camera::setupFlow() {
 }
 
 void Camera::updateFlow(ofPixels * _frame) {
-    flow.setWindowSize(16);
+//    flow.setWindowSize(16);
 #ifdef FIREWIRE
+    frame.resize(320, 240);
     flow.calcOpticalFlow(frame);
 #else
     flow.calcOpticalFlow(cam);
@@ -207,28 +218,32 @@ ofVec2f Camera::getAttraction(ofPoint &point, ofPoint &origin) {
 
 vector<float> Camera::getValues(int poly, int _count) {
     std::vector<float> v;
-    long distance;
-    for(size_t i=0;i<active[poly].size();i++) {
-        distance = bounds[poly].getCentroid2D().squareDistance(active[poly][i]);
-        v.push_back(distance);
-    }
-    
-    if(v.size()>2) {
-        vector<float>::iterator min_v = std::min_element(v.begin(),v.end());
-        vector<float>::iterator max_v = std::max_element(v.begin(),v.end());
-        long mn = min_v[0];
-        long mx = max_v[0];
-        
-        for(size_t i=0;i<v.size();i++) {
-            v[i] = (v.at(i) - mn) / (mx - mn);
-        }
-    }
-    
+//    long distance;
+//    for(size_t i=0;i<active[poly].size();i++) {
+//        distance = bounds[poly].getCentroid2D().squareDistance(active[poly][i]);
+//        v.push_back(distance);
+//    }
+//    
+//    if(v.size()>2) {
+//        vector<float>::iterator min_v = std::min_element(v.begin(),v.end());
+//        vector<float>::iterator max_v = std::max_element(v.begin(),v.end());
+//        long mn = min_v[0];
+//        long mx = max_v[0];
+//        
+//        for(size_t i=0;i<v.size();i++) {
+//            v[i] = (v.at(i) - mn) / (mx - mn);
+//        }
+//    }
+//    
     return v;
 }
 
-ofVec2f Camera::getAmplitudeWithinRegion(int poly) {
-    return flow.getAverageFlowInRegion(bounds[poly].getBoundingBox());
+vector<ofVec2f> Camera::getAmplitudeWithinRegion() {
+    vector<ofVec2f> v;
+    for(int i=0;i<N_POLY;i++) {
+        v.push_back(flow.getAverageFlowInRegion(active[i].getBoundingBox()));
+    }
+    return v;
 }
 
 

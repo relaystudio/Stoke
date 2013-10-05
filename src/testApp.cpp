@@ -60,6 +60,7 @@ void testApp::draw(){
 
 void testApp::updateGraphics() {
     cam->update();
+    part->setVectors(cam->getAmplitudeWithinRegion());
     part->update();
     
     // Draw particle system
@@ -73,11 +74,11 @@ void testApp::updateGraphics() {
     ofBackground(0);
     for(int i=0;i<N_PROJECTOR;i++) {
         ofPushMatrix();
-        ofEnableAlphaBlending();
+      //  ofEnableAlphaBlending();
         ofTranslate(i*pw, 0);
 //        for(int j=N_LAYER;j>0;j--) {
             //ofSetColor(255,255,255,j/N_LAYER * 255);
-            pview[i]->getLayer(0).draw(0,0);
+            pview[i]->getLayer(0)->draw(0,0);
   //      }
         ofPopMatrix();
     }
@@ -88,7 +89,6 @@ void testApp::updateGraphics() {
     mask.getTextureReference().bind();
     
     fbo.begin();
-    //ofClear(0,100);
     alpha.begin();
     
     alpha.setUniformTexture("tex0",cont,cont.getTextureReference().getTextureData().textureID);
@@ -160,7 +160,7 @@ void testApp::updateEdit() {
         canvas. begin();
         ofClear(0);
         ofSetColor(255,80,80);
-        pview[editCanvas]->getLayer(editLayer).draw(0,0);
+        pview[editCanvas]->getLayer(editLayer)->draw(0,0);
         
         if(save)  {
          ofBackground(0);
@@ -269,7 +269,7 @@ void testApp::keyPressed(int key){
 //        case '[':
             //exportSettings(); break;
         case ']':
-            reloadSettings(); break;
+            reloadSettings(); ofClear(0); break;
         case 'c':
             cam->closePoints(editPoly); break;
         case 'v':
@@ -333,7 +333,7 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
+    ofClear(0); 
 }
 
 //--------------------------------------------------------------
