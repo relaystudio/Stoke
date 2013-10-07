@@ -15,6 +15,7 @@ Viewport::Viewport(ofPoint loc, int w, int h) {
     
     for(int i=0;i<N_LAYER;i++) {
         layers[i].allocate(getWidth(), getHeight(), OF_IMAGE_COLOR_ALPHA);
+        layers[i].clear();
     }
 }
 

@@ -9,12 +9,15 @@
 #include "particles.h"
 
 enum AbletonControls {
-	kSpookyVol = 1,
-	kFireIntensity,
-	kFireA,
-	kFireB,
-	kFireC,
-	kFireD
+        kSpookyA = 1,
+        kSpookyB,
+        kSpookyC,
+        kSpookyD,
+        kFireA,
+        kFireB,
+        kFireC,
+        kFireD,
+        kFireIntensity
 };
 
 
@@ -27,6 +30,8 @@ Particles::Particles(ofRectangle _bounds) {
     world = _bounds;
     curX = world.getWidth()/4;
     curY = world.getHeight()/4;
+    upperRamp = 700;
+    lowerCutoff = 300;
     setupMidi();
     setupParticles();
     camVec.clear();
@@ -98,7 +103,7 @@ void Particles::setupParticleRects() {
 }
 
 void Particles::draw() {
-    ofEnableAlphaBlending();
+   // ofEnableAlphaBlending();
  //   ofEnableBlendMode(OF_BLENDMODE_ADD);
     for(size_t i = 0; i < fireParticles.size(); ++i) {
 #ifdef ONE_FBO
@@ -114,6 +119,7 @@ void Particles::draw() {
 			ofEnableBlendMode(OF_BLENDMODE_ADD);
             
 			if(showSpooky(i)) {
+               // ofLog() << "Spooky " << i;
 				spookyShader.begin();
 				spookyShader.setUniform1f("visibility", ofMap(stokeParams[i].spookyVisibility, 1, 0, 0, 0.05, true));
 				spookyShader.setUniform1f("colorMod", ofNoise(impulseIndex * 0.2));
@@ -150,15 +156,25 @@ void Particles::draw() {
 void Particles::update() {
     impulseIndex += 0.1;
 	
+    mainVal = 0.0;
+    
 	size_t targetColumn = ofMap(intensityVector.x, -1, 1, 0, fireParticles.size());
 	for(size_t i = 0; i < stokeParams.size(); ++i) {
-		float columnTarget = camVec[i].y;
+//float columnTarget = i == targetColumn ? intensityVector.y : 0;
+        float length = camVec[i].length();
+//        cout << length << endl;
+      length = length < lowerCutoff ? 0 : length;
+        float columnTarget = ofMap(length,0,upperRamp,0.,0.999, true);
+//        columnTarget = ofLerp(columnTarget,length,.8);
+        if(columnTarget > 1) columnTarget = 1;
 		
+        mainVal += columnTarget;
+        
 		if(stokeParams[i].intensity < columnTarget) {
-			stokeParams[i].intensity = ofLerp(stokeParams[i].intensity, columnTarget, 0.5);
+			stokeParams[i].intensity = ofLerp(stokeParams[i].intensity, columnTarget, 0.2); //How fast to rise
 			fireParticles[i].addImpulse();
 		} else {
-			stokeParams[i].intensity = ofLerp(stokeParams[i].intensity, columnTarget, 0.01);
+			stokeParams[i].intensity = ofLerp(stokeParams[i].intensity, columnTarget, 0.025); // How fast to go down
 		}
 	}
 	
@@ -204,13 +220,13 @@ void Particles::update() {
 	bgColor.g += flickerAmount * 0.5;
 	bgColor.lerp(targetColor, 0.15);
 	
-//#ifdef CONSTANT_INTENSITY
+#ifdef CONSTANT_INTENSITY
 	for(size_t i = 0; i < stokeParams.size(); ++i) {
 		stokeParams[i].intensity = 0.9;
 		stokeParams[i].spookyVisibility = 0.9;
 	}
-//#endif
-    
+#endif
+    mainVal = mainVal / 4;
     updateMidi();
 }
 
@@ -243,6 +259,10 @@ void Particles::setVectors(vector<ofVec2f> vec) {
     camVec = vec;
 }
 
+float Particles::getMainVal() {
+    return mainVal;
+}
+
 ///////////////////////////////////
 ////////// MIDI STUFFS  ///////////
 ///////////////////////////////////
@@ -253,9 +273,39 @@ void Particles::setupMidi() {
 
 void Particles::updateMidi() {
 	midiOut.sendControlChange(1, kFireIntensity, totalIntensity * 127);
+    
+    midiOut.sendControlChange(1,kSpookyA,(1-stokeParams[0].spookyVisibility)*127);
+    midiOut.sendControlChange(1,kSpookyB,(1-stokeParams[1].spookyVisibility)*127);
+    midiOut.sendControlChange(1,kSpookyC,(1-stokeParams[2].spookyVisibility)*127);
+    midiOut.sendControlChange(1,kSpookyD,(1-stokeParams[3].spookyVisibility)*127);
+    
 	midiOut.sendControlChange(1, kFireA, stokeParams[0].intensity * 127);
 	midiOut.sendControlChange(1, kFireB, stokeParams[1].intensity * 127);
 	midiOut.sendControlChange(1, kFireC, stokeParams[2].intensity * 127);
 	midiOut.sendControlChange(1, kFireD, stokeParams[3].intensity * 127);
-	midiOut.sendControlChange(1, kSpookyVol, ofMap(totalSpooky, 0, 1.25, 0, 127, true));
+
+}
+
+///////////////////////////////////
+////////// Value STUFFS  ///////////
+///////////////////////////////////
+
+void Particles::increaseUpper() {
+    upperRamp = ofClamp(upperRamp+100,0,1500);
+    ofLog() << "UpperRamp:" << upperRamp;
+}
+
+void Particles::decreaseUpper() {
+    upperRamp = ofClamp(upperRamp-100,0,1500);
+    ofLog() << "UpperRamp:" << upperRamp;
+}
+
+void Particles::increaseLower() {
+    lowerCutoff = ofClamp(lowerCutoff+50, 0,500);
+    ofLog() << "lowerCutoff:" << lowerCutoff;
+}
+
+void Particles::decreaseLower() {
+    lowerCutoff = ofClamp(lowerCutoff-50, 0,500);
+    ofLog() << "lowerCutoff:" << lowerCutoff;
 }

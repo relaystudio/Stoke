@@ -31,6 +31,7 @@ void testApp::setup(){
     
     part = new Particles(ofRectangle(0,0,pw*N_PROJECTOR,ph));
     alpha.load("shaders/alpha");
+    berserk.load("shaders/burst-shader");
 }
 
 //--------------------------------------------------------------
@@ -50,6 +51,16 @@ void testApp::draw(){
     else drawGraphics();
     if(debug) drawDebug();
     ofPopMatrix();
+    
+    float mult = ofMap(part->getMainVal(), 0.8, 1.0, 0.0, 0.3, true);
+    
+    ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
+    berserk.begin();
+    d += 0.1;
+    berserk.setUniform1f("t", d);
+    berserk.setUniform1fv("multi", &mult);
+    ofRect(0,0,ofGetWidth(), ofGetHeight());
+    berserk.end();
 }
 
 
@@ -59,19 +70,21 @@ void testApp::draw(){
 #pragma mark - Graphics
 
 void testApp::updateGraphics() {
+    if(debug || edit) ofShowCursor(); else ofHideCursor();
     cam->update();
     part->setVectors(cam->getAmplitudeWithinRegion());
     part->update();
     
     // Draw particle system
     cont.begin();
+    ofClear(0);
 //    ofBackground(0,100);
     part->draw();
     cont.end();
     
     // Make mask
     mask.begin();
-    ofBackground(0);
+    ofClear(0);
     for(int i=0;i<N_PROJECTOR;i++) {
         ofPushMatrix();
       //  ofEnableAlphaBlending();
@@ -272,11 +285,20 @@ void testApp::keyPressed(int key){
             reloadSettings(); ofClear(0); break;
         case 'c':
             cam->closePoints(editPoly); break;
-        case 'v':
+        case 'C':
             cam->resetCircle(); break;
         case 'f':
             fullscreen = !fullscreen;
             ofSetFullscreen(fullscreen);
+            break;
+        case 'v':
+            part->increaseUpper(); break;
+        case 'b':
+            part->decreaseUpper(); break;
+        case 'n':
+            part->increaseLower(); break;
+        case 'm':
+            part->decreaseLower(); break;
     }
 }
 

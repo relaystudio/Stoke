@@ -105,6 +105,8 @@
 		BDE5D73D17FF79C40041CD56 /* fire-shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73917FF79C40041CD56 /* fire-shader.vert */; };
 		BDE5D73E17FF79C40041CD56 /* spooky-shader.frag in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73A17FF79C40041CD56 /* spooky-shader.frag */; };
 		BDE5D73F17FF79C40041CD56 /* spooky-shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = BDE5D73B17FF79C40041CD56 /* spooky-shader.vert */; };
+		BDF9DD4E1800C5A100581DB7 /* burst-shader.frag in Sources */ = {isa = PBXBuildFile; fileRef = BDF9DD4C1800C5A100581DB7 /* burst-shader.frag */; };
+		BDF9DD4F1800C5A100581DB7 /* burst-shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = BDF9DD4D1800C5A100581DB7 /* burst-shader.vert */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -469,6 +471,8 @@
 		BDE5D73917FF79C40041CD56 /* fire-shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "fire-shader.vert"; sourceTree = "<group>"; };
 		BDE5D73A17FF79C40041CD56 /* spooky-shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "spooky-shader.frag"; sourceTree = "<group>"; };
 		BDE5D73B17FF79C40041CD56 /* spooky-shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "spooky-shader.vert"; sourceTree = "<group>"; };
+		BDF9DD4C1800C5A100581DB7 /* burst-shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "burst-shader.frag"; sourceTree = "<group>"; };
+		BDF9DD4D1800C5A100581DB7 /* burst-shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "burst-shader.vert"; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../openFrameworks/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -1274,6 +1278,8 @@
 		BD73943517E4364C007B8B80 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				BDF9DD4C1800C5A100581DB7 /* burst-shader.frag */,
+				BDF9DD4D1800C5A100581DB7 /* burst-shader.vert */,
 				BDDED4FD17EE3E0400DF196F /* alpha.frag */,
 				BDDED4FE17EE3E0400DF196F /* alpha.vert */,
 				BDDED4F917EBC45400DF196F /* shader.frag */,
@@ -1857,6 +1863,8 @@
 				BDE5D73D17FF79C40041CD56 /* fire-shader.vert in Sources */,
 				BDE5D73E17FF79C40041CD56 /* spooky-shader.frag in Sources */,
 				BDE5D73F17FF79C40041CD56 /* spooky-shader.vert in Sources */,
+				BDF9DD4E1800C5A100581DB7 /* burst-shader.frag in Sources */,
+				BDF9DD4F1800C5A100581DB7 /* burst-shader.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

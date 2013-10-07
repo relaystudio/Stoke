@@ -48,6 +48,12 @@ public:
 	void setupParticleRects();
     void setVectors(vector<ofVec2f> vec);
 	
+    float getMainVal();
+    
+    void increaseUpper();
+    void decreaseUpper();
+    void increaseLower();
+    void decreaseLower();
     
 private:
     ofxBox2d box2d;    ofRectangle world;
@@ -71,6 +77,7 @@ private:
 	vector<StokeParams> stokeParams;
 	
 	ofColor targetColor;
+    float mainVal;
 	
 	ofVec2f intensityVector;
 	
@@ -80,7 +87,7 @@ private:
 	vector<ofVec2f> spookyVerts;
     
     vector<ofVec2f> camVec;
-    
+    float upperRamp, lowerCutoff;
     
 };
 

@@ -241,7 +241,7 @@ vector<float> Camera::getValues(int poly, int _count) {
 vector<ofVec2f> Camera::getAmplitudeWithinRegion() {
     vector<ofVec2f> v;
     for(int i=0;i<N_POLY;i++) {
-        v.push_back(flow.getAverageFlowInRegion(active[i].getBoundingBox()));
+        v.push_back(flow.getTotalFlowInRegion(bounds[i].getBoundingBox()));
     }
     return v;
 }
@@ -299,10 +299,6 @@ void Camera::setupGUI() {
     gui->addWidgetDown(new ofxUIRadio( dim, dim, "FRAMERATE (FPS)", framerates, OFX_UI_ORIENTATION_HORIZONTAL));
     gui->addWidgetDown(new ofxUIRadio( dim, dim, "IMAGE CAPTURE SIZE (PX)", imageCaptureSizes, OFX_UI_ORIENTATION_HORIZONTAL));
     gui->addWidgetDown(new ofxUISpacer(length-xInit, 1));
-//    gui->addWidgetDown(new ofxUIBiLabelSlider(length-xInit, 2.0, 0.0, red, "RED", "LESS RED", "MORE RED", OFX_UI_FONT_SMALL));
-//    gui->addWidgetDown(new ofxUIBiLabelSlider(length-xInit, 2.0, 0.0, green, "GREEN", "LESS GREEN", "MORE GREEN", OFX_UI_FONT_SMALL));
-//    gui->addWidgetDown(new ofxUIBiLabelSlider(length-xInit, 2.0, 0.0, blue, "BLUE", "LESS BLUE", "MORE BLUE", OFX_UI_FONT_SMALL));
-//    
     
     // OPENCV STUFF
     gui->addWidgetDown(new ofxUIMinimalSlider(length-xInit, 0.1, 3., .5, "PYRAMIDSCALE", OFX_UI_FONT_SMALL));

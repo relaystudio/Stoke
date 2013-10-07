@@ -52,6 +52,7 @@ class testApp : public ofBaseApp{
         ofFbo cont; // Particles layer
         ofShader shader;
         ofShader alpha; // Alpha masks
+        ofShader berserk;
         ofFbo canvas; // Project + Draw
     
         Camera * cam;
@@ -65,6 +66,7 @@ class testApp : public ofBaseApp{
         ofPoint currentPoint;
         ofRectangle * rectBuf; // Holds cur buffer
     
+        float d; // incrementing shader
         bool edit, save, debug, fullscreen;
         int editLayer;
         int editCanvas, editPoly;
